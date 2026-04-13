@@ -1008,14 +1008,15 @@ function calcularStats() {
 
   mostrarPantalla("pantalla-stats");
 }
-
-
-function showToast(msg, ms = 1600) {
+       function showToast(msg, ms = 1600) {
   const t = document.getElementById("toast");
   if (!t) return;
   t.textContent = msg;
   t.classList.remove("hidden");
-  setTimeout(() => t.classList.add("hidden"),
+  setTimeout(() => {
+    t.classList.add("hidden");
+  }, ms);
+}
 
 
 

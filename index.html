@@ -51,6 +51,9 @@
 </head>
 
 <body class="bg-background font-body text-on-background min-h-screen flex items-center justify-center p-4">
+    <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-4 py-2 rounded-lg shadow-lg">
+        <p id="toast-message"></p>
+    </div>
     <main id="pantalla-bienvenida" class="w-full max-w-[450px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[600px]">
     <section class="bg-[#003857] p-10 flex-1 flex flex-col justify-center relative overflow-hidden text-white">
         <div class="absolute inset-0 z-0">
@@ -167,7 +170,16 @@
                 <span id="nombre-operario-cartel" class="font-bold text-primary text-sm uppercase">OPERARIO</span>
             </div>
         </div>
-        <div id="reader" class="hidden mb-6 rounded-xl overflow-hidden shadow-lg w-full" style="min-height: 250px;"></div>
+        <div id="scanner-wrap" class="hidden mb-6 rounded-xl overflow-hidden shadow-lg w-full relative" style="min-height: 250px;">
+  <div id="reader" class="w-full" style="min-height: 250px;"></div>
+
+  <!-- Marco visible (si el celular no muestra el del lector) -->
+  <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+    <div class="w-[320px] h-[160px] border-2 border-white/90 rounded-xl shadow-[0_0_0_9999px_rgba(0,0,0,0.15)]"></div>
+  </div>
+</div>
+
+         <div class="flex flex-col gap-5 px-4">
 
          <button id="btn-detener" onclick="detenerEscaneo()" class="hidden w-full h-12 bg-red-600 text-white rounded-xl font-bold shadow-md">
   DETENER ESCÁNER
@@ -207,6 +219,7 @@
 
     <main id="pantalla-carga" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
         <h3 class="text-2xl font-black text-[#003857] mb-6 border-b pb-4" id="nombre-prod-display">Producto</h3>
+        <p id="sku-prod-display" class="text-xs font-black text-gray-400 mb-6 uppercase tracking-widest"></p>
         
         <div class="space-y-6">
             <div>
@@ -579,8 +592,9 @@ function guardarNuevaPass() {
 // === 7) ESCÁNER (html5-qrcode) ===
 // Nota: necesita HTTPS / localhost para permisos de cámara. [3](https://scanapp.org/html5-qrcode-docs/docs/intro)
 async function iniciarEscaneo() {
-  const reader = $("reader");
-  reader.classList.remove("hidden");
+  const wrap = $("scanner-wrap");
+wrap.classList.remove("hidden")
+
   $("btn-detener").classList.remove("hidden");
 
   try {
@@ -626,6 +640,8 @@ async function iniciarEscaneo() {
           $("btn-detener").classList.add("hidden");
 
           $("nombre-prod-display").innerText = encontrado.Producto || "Producto";
+          $("sku-prod-display").innerText = "SKU: " + (encontrado.SKU || "");
+          showToast("✅ Producto encontrado");
           $("cant").value = "";
           $("trazabilidad").value = "";
           $("pos").value = "";
@@ -721,6 +737,12 @@ async function confirmarGuardado() {
 
   const traz = $("trazabilidad").value.trim();
   if (!traz) return alert("Ingresá Trazabilidad (manual).");
+  // ❌ No permitir trazabilidad repetida (chequeo local)
+const repetida = (puchoData || []).some(p => (p.trazabilidad || "").toString().trim() === traz);
+if (repetida) {
+  showToast("⚠️ Esa trazabilidad ya existe", 2200);
+  return alert("⚠️ Esa trazabilidad ya fue cargada. No se puede repetir.");
+}
 
   const rack = $("rack").value;
   const lado = $("lado").value;
@@ -986,6 +1008,16 @@ function calcularStats() {
 
   mostrarPantalla("pantalla-stats");
 }
+
+
+function showToast(msg, ms = 1600) {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.remove("hidden");
+  setTimeout(() => t.classList.add("hidden"),
+
+
 
 function obtenerClaseVencimiento(f) {
   if(!f) return "bg-emerald-500 text-white";

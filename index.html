@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PuchoWare - Operadores</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="on
+      <meta name="theme-color" content="#1B4F72">
+``
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#003857",
+                        "primary-container": "#1b4f72",
+                        "background": "#f8f9fa"
+                    },
+                    fontFamily: { "body": ["Public Sans"], "headline": ["Public Sans"] }
+                }
+            }
+        }
+    </script>
+    <style>
+       
+        .industrial-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .hidden-screen { display: none !important; }
+        
+        /* Reemplazamos el @apply por CSS puro para que no falle */
+        .btn-granix { 
+            width: 100%; 
+            height: 3.5rem; /* h-14 */
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 700; /* font-bold */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem; /* gap-2 */
+            transition: all 0.2s;
+        }
+        .btn-granix:active {
+            transform: scale(0.95);
+        }
+    </style>
+
+</head>
+
+<body class="bg-background font-body text-on-background min-h-screen flex items-center justify-center p-4">
+    <main id="pantalla-bienvenida" class="w-full max-w-[450px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[600px]">
+    <section class="bg-[#003857] p-10 flex-1 flex flex-col justify-center relative overflow-hidden text-white">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop" 
+                 class="w-full h-full object-cover opacity-20 grayscale" alt="Fondo">
+        </div>
+        <div class="relative z-10 flex flex-col items-center text-center">
+            <span class="material-symbols-outlined text-6xl mb-4">inventory</span>
+            <h1 class="text-xl font-black uppercase tracking-widest mb-2">PuchoWare</h1>
+            <div class="h-1 w-12 bg-blue-400 mb-8"></div>
+            <h2 class="text-4xl font-extrabold leading-tight">GESTIÓN <br/> DE ALMACENES</h2>
+            <p class="mt-4 text-blue-100 text-sm opacity-80">Terminal de Autogestión para Operarios</p>
+        </div>
+    </section>
+
+    <section class="p-10 bg-white flex flex-col items-center justify-center gap-6">
+        <div class="text-center">
+            <h3 class="text-2xl font-black text-[#003857]">¡Bienvenido!</h3>
+            <p class="text-gray-400 font-medium text-sm">Acceda para gestionar el inventario.</p>
+        </div>
+
+        <button onclick="mostrarPantalla('pantalla-login')" 
+                class="w-full h-16 bg-[#003857] text-white rounded-2xl font-bold text-lg shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
+            <span>ACCEDER AL PANEL</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+
+        <div class="flex flex-col items-center gap-1">
+            <p class="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">Terminal #042 - Depósito</p>
+            <p class="text-[10px] font-black text-gray-400 uppercase">© 2026 LogisticsPetra.</p>
+        </div>
+    </section>
+</main>
+
+   <main id="pantalla-login" class="w-full max-w-[1100px] flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-2xl min-h-[600px]">
+        
+        <section class="hidden md:flex flex-col justify-between w-1/2 bg-[#003857] p-12 relative overflow-hidden text-white">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop" 
+                     class="w-full h-full object-cover opacity-30 grayscale brightness-50" 
+                     alt="Fondo Depósito">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#003857] via-transparent to-[#003857]/50"></div>
+            </div>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-4xl">inventory</span>
+                    <h1 class="text-2xl font-black uppercase tracking-tighter">PuchoWare</h1>
+                </div>
+                <div class="mt-20">
+                    <h2 class="text-5xl font-extrabold leading-none mb-6">GESTIÓN <br/><span class="text-blue-300">DE ALMACENES</span></h2>
+                    <p class="text-blue-100 text-lg opacity-90 font-medium max-w-sm">
+                        Acceso centralizado para operarios de depósito y gestión de inventario Alimentos Granix.
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex flex-col gap-4">
+                <div class="flex items-center gap-4 bg-white/10 industrial-blur p-4 rounded-xl border border-white/20">
+                    <span class="material-symbols-outlined text-white">qr_code_scanner</span>
+                    <div>
+                        <p class="text-white text-sm font-bold">Escaneo Activo</p>
+                        <p class="text-white/60 text-xs uppercase tracking-widest">Terminal #042 - Depósito</p>
+                    </div>
+                </div>
+                <p class="text-white/40 text-xs tracking-widest uppercase font-bold">© 2026 LogisticsPetra.</p>
+            </div>
+        </section>
+
+        <section class="flex-1 flex flex-col justify-center items-center p-8 md:p-16 bg-white">
+            <div class="w-full max-w-sm">
+                <div class="mb-10 text-center">
+                    <h3 class="text-3xl font-black text-[#003857] tracking-tight mb-2">Ingreso del Usuario</h3>
+                    <p class="text-gray-500 font-medium">Use su legajo para continuar.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Número de Legajo</label>
+                        <input type="text" id="user" 
+                               class="block w-full h-14 pl-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#003857] transition-all font-medium" 
+                               placeholder="Ej: 8030">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Contraseña</label>
+                        <input type="password" id="pass" 
+                               class="block w-full h-14 pl-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#003857] transition-all" 
+                               placeholder="••••••••">
+                    </div>
+
+                    <button onclick="intentarLogin()" 
+                            class="w-full h-14 bg-[#003857] text-white rounded-xl font-bold text-lg shadow-lg hover:bg-[#1b4f72] transition-all flex items-center justify-center gap-2">
+                        <span>INGRESAR AL PANEL</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+
+                    <div class="flex justify-center py-2">
+                        <a class="text-sm font-bold text-[#003857] hover:underline" href="#" onclick="olvideClave()">¿Olvidó su contraseña?</a>
+                    </div>
+                </div>
+
+                
+            
+        
+        </section>
+    </main>
+
+    <main id="pantalla-inicio" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+        <div class="text-center mb-6">
+            <h2 class="text-xl font-black text-primary uppercase">Panel de Control</h2>
+            <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-primary text-sm">person</span>
+                <span id="nombre-operario-cartel" class="font-bold text-primary text-sm uppercase">OPERARIO</span>
+            </div>
+        </div>
+        <div id="reader" class="hidden mb-6 rounded-xl overflow-hidden shadow-lg w-full" style="min-height: 250px;"></div>
+
+         <button id="btn-detener" onclick="detenerEscaneo()" class="hidden w-full h-12 bg-red-600 text-white rounded-xl font-bold shadow-md">
+  DETENER ESCÁNER
+</button>
+   
+
+    <button onclick="iniciarEscaneo()" class="w-full h-16 bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-md">
+        <span class="material-symbols-outlined">qr_code_scanner</span> ESCANEAR PRODUCTO
+    </button>
+    
+    <button onclick="ingresoManualSKU()" class="w-full h-16 bg-gray-100 text-primary rounded-xl font-bold flex items-center justify-center gap-3 border border-gray-200">
+        <span class="material-symbols-outlined">edit_note</span> INGRESO MANUAL SKU
+    </button>
+
+    <button onclick="mostrarPantalla('pantalla-ubicaciones')" class="w-full h-16 bg-blue-100 text-primary rounded-xl font-bold flex items-center justify-center gap-3 border border-blue-200">
+        <span class="material-symbols-outlined">grid_view</span> GESTIÓN DE UBICACIONES
+    </button>
+
+    <button onclick="mostrarInventario()" class="w-full h-16 bg-gray-100 text-primary rounded-xl font-bold flex items-center justify-center gap-3">
+        <span class="material-symbols-outlined">list_alt</span> VER INVENTARIO
+    </button>
+
+    <button onclick="calcularStats()" class="w-full h-16 bg-white text-indigo-600 border-2 border-indigo-100 rounded-xl font-bold flex items-center justify-center gap-3 shadow-sm">
+        <span class="material-symbols-outlined">analytics</span> REPORTES DEL DEPÓSITO
+    </button>
+
+    <button onclick="mostrarPantalla('pantalla-config')" class="w-full h-14 bg-gray-50 text-gray-500 rounded-xl font-bold flex items-center justify-center gap-3">
+        <span class="material-symbols-outlined">settings</span> MI PERFIL / CLAVE
+    </button>
+    
+    <button onclick="cerrarSesion()" class="w-full py-4 text-red-400 font-bold text-xs uppercase tracking-widest">
+        Cerrar Sesión
+    </button>
+
+</div>
+    </main>
+
+    <main id="pantalla-carga" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
+        <h3 class="text-2xl font-black text-[#003857] mb-6 border-b pb-4" id="nombre-prod-display">Producto</h3>
+        
+        <div class="space-y-6">
+            <div>
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cantidad</label>
+                <input type="number" id="cant" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-2xl font-black text-center text-[#003857]" placeholder="0">
+            </div> 
+
+            <div class="p-4 bg-blue-50 rounded-2xl border-2 border-blue-100">
+            <label class="text-xs font-bold text-blue-500 uppercase tracking-widest">N° de Trazabilidad (Manual)</label>
+            <input type="text" id="trazabilidad" 
+                   class="w-full h-14 bg-white border-blue-200 rounded-xl text-center font-black text-[#003857] placeholder:text-gray-300 focus:ring-2 focus:ring-blue-400" 
+                   placeholder="Ej: 172-570842">
+            <p class="text-[10px] text-blue-400 mt-1 text-center font-bold">COPIAR DE LA ETIQUETA BLANCA</p>
+        </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Rack (1-8)</label>
+                    <select id="rack" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+                        <option value="R1">R1</option><option value="R2">R2</option>
+                        <option value="R3">R3</option><option value="R4">R4</option>
+                        <option value="R5">R5</option><option value="R6">R6</option>
+                        <option value="R7">R7</option><option value="R8">R8</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Lado / Nivel</label>
+                    <select id="lado" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+                        <option value="A">Lado A (Sup)</option>
+                        <option value="B">Lado B (Inf)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Posición (1-29)</label>
+                <input type="number" id="pos" min="1" max="29" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]" placeholder="Ej: 15">
+            </div>
+             <div class="mt-4">
+             <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Fecha de Vencimiento</label>
+              <input type="date" id="vence" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857] focus:ring-2 focus:ring-primary">
+            </div>
+            
+            
+            <button onclick="confirmarGuardado()" class="w-full h-16 bg-[#003857] text-white rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all">
+                ✅ GUARDAR UBICACIÓN
+            </button>
+            <button onclick="mostrarPantalla('pantalla-inicio')" class="w-full h-12 text-gray-400 font-bold hover:text-red-400 transition-colors">CANCELAR</button>
+        </div>
+    </main>
+
+    <main id="pantalla-inv" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-black text-primary uppercase">Inventario Local</h3>
+            <button onclick="descargarExcel()" class="text-primary"><span class="material-symbols-outlined">download</span></button>
+        </div>
+        <div id="lista-puchos" class="max-h-[400px] overflow-y-auto mb-6 border rounded-xl"></div>
+        <button onclick="mostrarPantalla('pantalla-inicio')" class="w-full h-14 bg-primary text-white rounded-xl font-bold">VOLVER</button>
+    </main>
+
+    <main id="pantalla-config" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
+        <h3 class="text-2xl font-black text-primary mb-6">Cambiar Clave</h3>
+        <div class="space-y-6">
+            <div>
+                <label class="text-xs font-bold text-gray-400 uppercase">Nueva Contraseña</label>
+                <input type="password" id="nueva-pass" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl" placeholder="Mínimo 4 caracteres">
+            </div>
+            <button onclick="guardarNuevaPass()" class="w-full h-14 bg-primary text-white rounded-xl font-bold shadow-lg">ACTUALIZAR AHORA</button>
+            <button onclick="mostrarPantalla('pantalla-inicio')" class="w-full h-12 text-gray-400 font-bold">CANCELAR</button>
+        </div>
+    </main>
+    <main id="pantalla-ubicaciones" class="hidden-screen w-full max-w-7xl mx-auto px-4 pb-32">
+        
+        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 pt-4">
+            <div class="space-y-1">
+                <span class="text-gray-400 font-bold text-xs uppercase tracking-widest">Almacén Central Granix</span>
+                <h2 class="text-3xl font-black text-[#003857] tracking-tight">Gestión de Ubicaciones</h2>
+            </div>
+            <button onclick="mostrarPantalla('pantalla-inicio')" class="px-6 py-2 bg-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-300 transition-all">⬅️ VOLVER AL PANEL</button>
+        </header>
+
+        <div class="flex flex-wrap gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-gray-200 border border-gray-300"></div><span class="text-[10px] font-black text-gray-400 uppercase">Vacío</span></div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> <span class="text-[10px] font-black text-gray-400 uppercase">Estable (+5 meses)</span>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-yellow-400"></div><span class="text-[10px] font-black text-gray-400 uppercase">Alerta (4-5 meses)</span></div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div><span class="text-[10px] font-black text-gray-400 uppercase">Crítico (2-3 meses)</span></div>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-black"></div><span class="text-[10px] font-black text-gray-400 uppercase">Vencido</span></div>
+        </div>
+
+        <div class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <label class="text-xs font-black text-primary uppercase tracking-widest block mb-3">🔍 Localizador Inteligente de Puchos</label>
+            <div class="relative">
+                <input type="text" id="input-busqueda" oninput="ejecutarBusquedaGlobal(this.value)" 
+                       class="w-full h-16 pl-14 bg-gray-50 border-2 border-gray-100 rounded-2xl font-bold text-primary focus:border-primary focus:bg-white transition-all shadow-inner" 
+                       placeholder="Escribí el nombre del producto...">
+                <span class="material-symbols-outlined absolute left-5 top-5 text-gray-400 text-3xl">search</span>
+            </div>
+
+            <div id="resultados-busqueda" class="mt-4 space-y-2 max-h-80 overflow-y-auto hidden">
+                </div>
+        </div>
+
+        <div class="bg-[#003857] p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden">
+            <div class="relative z-10">
+                <h4 class="text-sm font-black uppercase mb-6 opacity-60 text-center tracking-widest">MAPA DEL DEPÓSITO - SELECCIONE UN RACK</h4>
+                <div class="grid grid-cols-4 md:grid-cols-8 gap-3">
+                    <button onclick="abrirDetalleRack('R1')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R1</button>
+                    <button onclick="abrirDetalleRack('R2')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R2</button>
+                    <button onclick="abrirDetalleRack('R3')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R3</button>
+                    <button onclick="abrirDetalleRack('R4')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R4</button>
+                    <button onclick="abrirDetalleRack('R5')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R5</button>
+                    <button onclick="abrirDetalleRack('R6')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R6</button>
+                    <button onclick="abrirDetalleRack('R7')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R7</button>
+                    <button onclick="abrirDetalleRack('R8')" class="h-24 bg-white/10 border border-white/20 rounded-xl hover:bg-white/30 font-black text-xl flex items-center justify-center shadow-lg">R8</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <main id="pantalla-rack-detalle" class="hidden-screen w-full max-w-7xl mx-auto px-4 pb-20">
+        <header class="py-8 flex justify-between items-center">
+            <div>
+                <h2 id="titulo-rack" class="text-4xl font-black text-[#003857] uppercase tracking-tighter">Rack --</h2>
+                <p class="text-gray-400 font-bold text-xs uppercase tracking-widest">Nivel Superior (A) e Inferior (B)</p>
+            </div>
+            <button onclick="mostrarPantalla('pantalla-ubicaciones')" class="bg-[#003857] text-white px-6 py-3 rounded-xl font-bold shadow-lg">VOLVER AL MAPA</button>
+        </header>
+
+        <div class="grid grid-cols-1 gap-8">
+            <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
+                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado A (Superior) - 29 Posiciones</h3>
+                <div id="grid-lado-a" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
+                    </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
+                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado B (Inferior) - 29 Posiciones</h3>
+                <div id="grid-lado-b" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
+                    </div>
+            </div>
+        </div>
+    </main>
+    <main id="pantalla-stats" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
+    <h3 class="text-2xl font-black text-primary mb-6 border-b pb-4">ESTADO DEL DEPÓSITO</h3>
+    
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-blue-50 p-4 rounded-2xl text-center">
+            <p class="text-[10px] font-bold text-blue-400 uppercase">Total Puchos</p>
+            <p id="stat-total" class="text-3xl font-black text-primary">0</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-2xl text-center">
+            <p class="text-[10px] font-bold text-red-400 uppercase">Vencimientos Críticos</p>
+            <p id="stat-criticos" class="text-3xl font-black text-red-600">0</p>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+            <span class="text-xs font-bold text-gray-500 uppercase">Espacio Ocupado</span>
+            <span id="stat-ocupacion" class="font-black text-primary">0%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div id="bar-ocupacion" class="bg-primary h-2 rounded-full" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <button onclick="mostrarPantalla('pantalla-inicio')" class="btn-granix bg-primary text-white mt-10">VOLVER</button>
+</main>
+    
+    
+   <script>
+
+
+
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxH3o5fAVLurowrU3pe6QTO-B2aEOTDYWQUvFUlXYTiCUlemdjP0WtGW6DjYTNJIQ/exec"; // Ej: https://script.google.com/macros/s/XXXX/exec
+const TERMINAL_ID = "042";
+const TOTAL_RACKS = 8;
+const TOTAL_LADOS = 2;
+const POSICIONES_POR_LADO = 29;
+const TOTAL_SLOTS = TOTAL_RACKS * TOTAL_LADOS * POSICIONES_POR_LADO;
+
+// === 1) ESTADO GLOBAL ===
+let PRODUCTOS_MAESTRO = [];           // para escáner (Maestro)
+let PRODUCTOS_DATABASE_MASTER = [];   // para búsqueda manual (Productos)
+let puchoData = [];                   // Inventario
+let html5QrCode = null;
+let productoActual = null;
+
+let operarioLogueado = localStorage.getItem("operarioActual");
+
+// Login local (mínimo) + posibilidad de cambio de clave en localStorage
+const clavesDefault = { "alan": "granix2026", "juan": "deposito1", "5039": "1234" };
+const clavesStorageKey = "puchoware_claves_local";
+const clavesLocal = JSON.parse(localStorage.getItem(clavesStorageKey) || "{}");
+
+// === 2) UTILIDADES ===
+const $ = (id) => document.getElementById(id);
+
+function safeUpper(s) { return (s || "").toString().toUpperCase(); }
+function safeLower(s) { return (s || "").toString().toLowerCase(); }
+function todayISO() { return new Date().toISOString().slice(0,10); }
+
+function normalizarCodigo(str) {
+  // deja solo números (por si el lector mete espacios o guiones)
+  return (str || "").toString().replace(/\D/g, "").trim();
+}
+``
+
+function getAny(obj, keys) {
+  if (!obj) return null;
+  // match case-insensitive
+  const map = {};
+  Object.keys(obj).forEach(k => map[k.toLowerCase()] = k);
+  for (const k of keys) {
+    const real = map[k.toLowerCase()];
+    if (real && obj[real] !== undefined && obj[real] !== null && obj[real] !== "") return obj[real];
+  }
+  return null;
+}
+
+function alertError(msg, err) {
+  console.error(msg, err);
+  alert("❌ " + msg);
+}
+
+// === 3) NAVEGACIÓN ===
+function mostrarPantalla(id) {
+  const pantallas = [
+    "pantalla-bienvenida","pantalla-login","pantalla-inicio","pantalla-carga",
+    "pantalla-inv","pantalla-config","pantalla-ubicaciones","pantalla-rack-detalle","pantalla-stats"
+  ];
+  pantallas.forEach(p => {
+    const el = $(p);
+    if (el) el.classList.add("hidden-screen");
+  });
+  const actual = $(id);
+  if (actual) actual.classList.remove("hidden-screen");
+
+  if (id === "pantalla-inicio" && operarioLogueado) {
+    $("nombre-operario-cartel").innerText = safeUpper(operarioLogueado);
+  }
+}
+
+// === 4) API (Apps Script) ===
+// Apps Script suele redirigir a script.googleusercontent.com, por eso mantenemos redirect: "follow". [2](https://developers.google.com/apps-script/guides/content)
+async function apiGet(sheet) {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_ACA")) throw new Error("Falta APPS_SCRIPT_URL");
+  const url = `${APPS_SCRIPT_URL}?action=get&sheet=${encodeURIComponent(sheet)}`;
+  const res = await fetch(url, { method: "GET", redirect: "follow" });
+  if (!res.ok) throw new Error(`GET ${sheet} -> ${res.status}`);
+  return await res.json();
+}
+
+// Para evitar CORS/preflight con Apps Script, usamos Content-Type text/plain (simple request). [4](https://stackoverflow.com/questions/53433938/how-do-i-allow-a-cors-requests-in-my-google-script)[7](https://diyavijay.medium.com/struggling-with-cors-in-google-apps-script-heres-the-fix-e3eec09f07dd)
+async function apiPost(payload) {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_ACA")) throw new Error("Falta APPS_SCRIPT_URL");
+  const res = await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    redirect: "follow",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error(`POST -> ${res.status}`);
+  return await res.json();
+}
+
+// === 5) CARGA DE DATOS (CEREBRO) ===
+async function conectarCerebro() {
+  try {
+    console.log("🧠 Sincronizando con Google Sheets (Apps Script)...");
+    const [inv, mae, prod] = await Promise.all([
+      apiGet("Inventario"),
+      apiGet("Maestro"),
+      apiGet("Productos")
+    ]);
+
+    // Inventario normalizado
+    puchoData = (inv.data || []).map(p => ({
+      fecha: getAny(p, ["Fecha"]) || "",
+      sku: getAny(p, ["SKU","Sku","Codigo","Código","codigo","Código SKU"]) || "",
+      producto: getAny(p, ["Producto","Nombre","Nombre del Producto"]) || "Sin Nombre",
+      cantidad: parseInt(getAny(p, ["Cantidad","CANT","cant"]) || "0", 10) || 0,
+      trazabilidad: getAny(p, ["Trazabilidad","TRAZ","trazabilidad"]) || "",
+      rack: getAny(p, ["Rack","RACK"]) || "",
+      lado: getAny(p, ["Lado","LADO"]) || "",
+      posicion: getAny(p, ["Posición","Posicion","POS"]) || "",
+      vencimiento: getAny(p, ["Vencimiento","Vence","Fecha Vencimiento"]) || "",
+      operario: getAny(p, ["Usuario","Operario","user"]) || ""
+    }));
+
+    // Maestro (para escáner)
+    PRODUCTOS_MAESTRO = (mae.data || []);
+
+    // Productos (para búsqueda manual si querés)
+    PRODUCTOS_DATABASE_MASTER = (prod.data || []).map(r => ({
+    codigo: (r["Codigo"] ?? "").toString().trim(),
+    dun14: (r["(SKU / DUN-14)"] ?? "").toString().trim(),
+    nombre: (r["Nombre del Producto"] ?? "").toString().trim()
+}));
+``
+
+    console.log("✅ OK:", {
+      inventario: puchoData.length,
+      maestro: PRODUCTOS_MAESTRO.length,
+      productos: PRODUCTOS_DATABASE_MASTER.length
+    });
+
+  } catch (err) {
+    console.warn("⚠️ No se pudo sincronizar con Apps Script. Intentando fallback productos.json...", err);
+    await cargarFallbackLocal();
+  }
+}
+
+async function cargarFallbackLocal() {
+  // Fallback: productos.json (local) para que al menos el escáner encuentre productos por barcode
+  try {
+    const res = await fetch("productos.json", { cache: "no-store" });
+    const data = await res.json();
+    // productos.json tiene: barcode, nombre, presentacion [6](https://educacionadventistaorg-my.sharepoint.com/personal/malena_espindola_clinicaadventista_org/Documents/Archivos%20de%20Microsoft%C2%A0Copilot%20Chat/productos.json)
+    PRODUCTOS_MAESTRO = data.map(p => ({
+      Barcode: p.barcode,
+      SKU: p.nombre,
+      Producto: (p.presentacion ? `${p.nombre} - ${p.presentacion}` : p.nombre)
+    }));
+    puchoData = []; // sin inventario sin backend
+    console.log("✅ Fallback local cargado:", PRODUCTOS_MAESTRO.length);
+    alert("⚠️ Modo offline: cargué productos.json. Inventario/guardado deshabilitados hasta configurar Apps Script.");
+  } catch (e) {
+    alertError("No pude cargar ni Apps Script ni productos.json", e);
+  }
+}
+
+// === 6) LOGIN / PERFIL ===
+function intentarLogin() {
+  const u = safeLower($("user").value).trim();
+  const p = $("pass").value;
+
+  const claveLocal = clavesLocal[u];
+  const clave = (claveLocal !== undefined ? claveLocal : clavesDefault[u]);
+
+  if (clave === p) {
+    localStorage.setItem("operarioActual", u);
+    operarioLogueado = u;
+    mostrarPantalla("pantalla-inicio");
+  } else {
+    alert("Clave incorrecta");
+  }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem("operarioActual");
+  location.reload();
+}
+
+function olvideClave() {
+  alert("📌 Recupero de clave: hablá con supervisión para reset. (Implementable con Apps Script si querés)");
+}
+
+function guardarNuevaPass() {
+  const nueva = $("nueva-pass").value.trim();
+  if (nueva.length < 4) return alert("Mínimo 4 caracteres");
+  if (!operarioLogueado) return alert("No hay usuario logueado");
+  clavesLocal[operarioLogueado] = nueva;
+  localStorage.setItem(clavesStorageKey, JSON.stringify(clavesLocal));
+  alert("✅ Clave actualizada en este dispositivo.");
+  $("nueva-pass").value = "";
+  mostrarPantalla("pantalla-inicio");
+}
+
+// === 7) ESCÁNER (html5-qrcode) ===
+// Nota: necesita HTTPS / localhost para permisos de cámara. [3](https://scanapp.org/html5-qrcode-docs/docs/intro)
+async function iniciarEscaneo() {
+  const reader = $("reader");
+  reader.classList.remove("hidden");
+  $("btn-detener").classList.remove("hidden");
+
+  try {
+    if (html5QrCode) {
+      await html5QrCode.stop().catch(() => {});
+      html5QrCode = null;
+    }
+
+    // “Modo código de barras”: le decimos qué formatos buscar
+    const decoderConfig = {
+      formatsToSupport: [
+        Html5QrcodeSupportedFormats.EAN_13,
+        Html5QrcodeSupportedFormats.EAN_8,
+        Html5QrcodeSupportedFormats.CODE_128,
+        Html5QrcodeSupportedFormats.ITF,
+        Html5QrcodeSupportedFormats.UPC_A,
+        Html5QrcodeSupportedFormats.UPC_E
+      ],
+      // Usa detector nativo si el navegador lo soporta (mejor para barras)
+      useBarCodeDetectorIfSupported: true,
+      experimentalFeatures: { useBarCodeDetectorIfSupported: true }
+    };
+
+    html5QrCode = new Html5Qrcode("reader", decoderConfig);
+
+    // Cuadro rectangular: ayuda a leer 1D (barras)
+    const scanConfig = { fps: 12, qrbox: { width: 320, height: 160 } };
+
+    await html5QrCode.start(
+      { facingMode: "environment" },
+      scanConfig,
+      async (decodedText) => {
+        const code = normalizarCodigo(decodedText);
+        const encontrado = buscarProductoEnMaestro(code);
+
+        if (encontrado) {
+          productoActual = encontrado;
+
+          await html5QrCode.stop().catch(() => {});
+          html5QrCode = null;
+
+          reader.classList.add("hidden");
+          $("btn-detener").classList.add("hidden");
+
+          $("nombre-prod-display").innerText = encontrado.Producto || "Producto";
+          $("cant").value = "";
+          $("trazabilidad").value = "";
+          $("pos").value = "";
+          $("vence").value = todayISO();
+
+          mostrarPantalla("pantalla-carga");
+        } else {
+          alert(`⚠️ No encontré el código "${code}" en Maestro ni en Productos.`);
+        }
+      },
+      () => {}
+    );
+
+  } catch (err) {
+    alertError("Error de cámara. Probá con Live Server (localhost) o https.", err);
+    $("btn-detener").classList.add("hidden");
+  }
+}
+``
+
+
+
+async function detenerEscaneo() {
+  try {
+    if (html5QrCode) {
+      await html5QrCode.stop();
+      html5QrCode = null;
+    }
+    $("reader").classList.add("hidden");
+    $("btn-detener").classList.add("hidden");
+    console.log("✅ Cámara apagada");
+  } catch (e) {
+    console.error("No se pudo detener", e);
+  }
+}
+
+function buscarProductoEnMaestro(code) {
+  const scanned = normalizarCodigo(code);
+  if (!scanned) return null;
+
+  // Para que matchee aunque sea 13 o 14 dígitos:
+  // (EAN-13 vs DUN-14/GTIN-14)
+  function coincide(valorEnHoja) {
+    const b = normalizarCodigo(valorEnHoja);
+    if (!b) return false;
+
+    if (b === scanned) return true;
+
+    // Hoja 14, escaneo 13 (comparo sin el primer dígito)
+    if (b.length === 14 && scanned.length === 13 && b.slice(1) === scanned) return true;
+
+    // Hoja 13, escaneo 14
+    if (b.length === 13 && scanned.length === 14 && scanned.slice(1) === b) return true;
+
+    // último recurso: últimos 13
+    if (b.length >= 13 && scanned.length >= 13 && b.slice(-13) === scanned.slice(-13)) return true;
+
+    return false;
+  }
+
+  // 1) Buscar en MAESTRO (Barcode, SKU, Producto)
+  const m = (PRODUCTOS_MAESTRO || []).find(p => coincide(p.Barcode));
+  if (m) {
+    return {
+      SKU: (m.SKU || "").toString().trim(),
+      Producto: (m.Producto || "").toString().trim(),
+      raw: m
+    };
+  }
+
+  // 2) Buscar en PRODUCTOS (columna "(SKU / DUN-14)")
+  const p = (PRODUCTOS_DATABASE_MASTER || []).find(x => coincide(x.dun14));
+  if (p) {
+    return {
+      SKU: (p.codigo || "").toString().trim(),
+      Producto: (p.nombre || "").toString().trim(),
+      raw: p
+    };
+  }
+
+  return null;
+}
+``
+
+
+// === 8) CARGA / GUARDADO EN INVENTARIO ===
+async function confirmarGuardado() {
+  if (!productoActual) return alert("Primero escaneá o elegí un SKU.");
+  if (!operarioLogueado) return alert("No hay operario logueado.");
+
+  const cant = parseInt($("cant").value || "0", 10);
+  if (!cant || cant <= 0) return alert("Ingresá una cantidad válida.");
+
+  const traz = $("trazabilidad").value.trim();
+  if (!traz) return alert("Ingresá Trazabilidad (manual).");
+
+  const rack = $("rack").value;
+  const lado = $("lado").value;
+  const pos = $("pos").value.trim();
+  if (!pos || parseInt(pos,10) < 1 || parseInt(pos,10) > 29) return alert("Posición inválida (1-29).");
+
+  const vence = $("vence").value;
+
+  const payload = {
+    action: "addInventario",
+    data: {
+      "Fecha": new Date().toLocaleString(),
+      "SKU": productoActual.SKU,
+      "Producto": productoActual.Producto,
+      "Cantidad": cant,
+      "Trazabilidad": traz,
+      "Rack": rack,
+      "Lado": lado,
+      "Posición": pos,
+      "Vencimiento": vence,
+      "Usuario": operarioLogueado
+    }
+  };
+
+  try {
+    const r = await apiPost(payload);
+    if (!r.ok) throw new Error(r.error || "No ok");
+    alert("✅ Guardado");
+    await conectarCerebro();
+    mostrarPantalla("pantalla-inicio");
+  } catch (e) {
+    alertError("No pude guardar en el Excel (Apps Script).", e);
+  }
+}
+
+function ingresoManualSKU() {
+  const sku = prompt("Código / SKU:");
+  if (!sku) return;
+  const e = PRODUCTOS_DATABASE_MASTER.find(p => p.codigo == sku);
+  if (e) {
+    productoActual = { SKU: e.codigo, Producto: e.nombre };
+    $("nombre-prod-display").innerText = e.nombre || `SKU ${e.codigo}`;
+    $("vence").value = todayISO();
+    mostrarPantalla("pantalla-carga");
+  } else {
+    // Intento también por Maestro
+    const m = buscarProductoEnMaestro(sku);
+    if (m) {
+      productoActual = m;
+      $("nombre-prod-display").innerText = m.Producto;
+      $("vence").value = todayISO();
+      mostrarPantalla("pantalla-carga");
+    } else {
+      alert("No encontrado en maestro.");
+    }
+  }
+}
+
+// === 9) UBICACIONES / MAPA ===
+function abrirDetalleRack(rackId) {
+  $("titulo-rack").innerText = "VISTA RACK " + rackId;
+  mostrarPantalla("pantalla-rack-detalle");
+  dibujarNivel("grid-lado-a", rackId, "A");
+  dibujarNivel("grid-lado-b", rackId, "B");
+}
+
+function dibujarNivel(contenedorId, rackId, lado) {
+  const grid = $(contenedorId);
+  if (!grid) return;
+  grid.innerHTML = "";
+
+  for (let i = 1; i <= 29; i++) {
+    const ocupantes = puchoData.filter(p =>
+      p.rack === rackId &&
+      p.lado === lado &&
+      String(p.posicion) == String(i)
+    );
+
+    let claseColor = "bg-gray-50 text-gray-200 border border-gray-100";
+    if (ocupantes.length > 0) {
+      claseColor = obtenerClaseVencimiento(ocupantes[0].vencimiento);
+    }
+
+    grid.innerHTML += `
+      <div onclick="gestionarPosicion('${rackId}', '${lado}', ${i})"
+        class="h-12 flex flex-col items-center justify-center rounded-lg text-[10px] font-black cursor-pointer transition-all hover:scale-110 ${claseColor}">
+        ${i}
+        ${ocupantes.length > 1 ? `<span class="text-[7px] bg-white/30 px-1 rounded">x${ocupantes.length}</span>` : ""}
+      </div>`;
+  }
+}
+
+async function gestionarPosicion(rack, lado, pos) {
+  const ocupantes = puchoData.filter(p => p.rack === rack && p.lado === lado && String(p.posicion) == String(pos));
+  if (ocupantes.length === 0) return alert(`Posición ${rack}-${lado}${pos} VACÍA`);
+
+  let msj = `📦 GESTIÓN: ${rack}-${lado}${pos}\nSeleccione un producto:\n\n`;
+  ocupantes.forEach((p, idx) => msj += `${idx + 1}. ${p.producto} (Stock: ${p.cantidad}) (Vence: ${p.vencimiento || "S/F"})\n`);
+  const sel = prompt(msj + "\nIngrese el número:");
+  if (!sel) return;
+
+  const pucho = ocupantes[parseInt(sel, 10) - 1];
+  if (!pucho) return alert("Selección no válida");
+
+  const accion = prompt(
+    `Producto: ${pucho.producto}\nStock: ${pucho.cantidad}\n\n` +
+    `1. DESPACHAR (Retirar)\n` +
+    `2. MOVER (Cambiar ubicación)\n` +
+    `3. CANCELAR`
+  );
+
+  if (accion === "1") {
+    const cantidadASacar = prompt(`Stock disponible: ${pucho.cantidad}\n¿Cuánto vas a retirar?`);
+    if (cantidadASacar === null || cantidadASacar === "") return;
+
+    const numSacar = parseInt(cantidadASacar, 10);
+    if (isNaN(numSacar) || numSacar <= 0) return alert("❌ Cantidad no válida.");
+    if (numSacar > pucho.cantidad) return alert("❌ No podés sacar más de lo que hay.");
+
+    const sobrante = pucho.cantidad - numSacar;
+
+    try {
+      if (sobrante === 0) {
+        if (confirm("Se retira el pucho completo. ¿Liberar posición?")) {
+          const r = await apiPost({ action: "deleteInventarioByTraz", trazabilidad: pucho.trazabilidad });
+          if (!r.ok) throw new Error(r.error || "No ok");
+          alert("✅ Posición liberada.");
+        }
+      } else {
+        const r = await apiPost({ action: "updateInventarioByTraz", trazabilidad: pucho.trazabilidad, data: { "Cantidad": sobrante } });
+        if (!r.ok) throw new Error(r.error || "No ok");
+        alert(`✅ Retiro OK. Quedan ${sobrante}.`);
+      }
+      await conectarCerebro();
+      mostrarPantalla("pantalla-inicio");
+    } catch (e) {
+      alertError("No pude actualizar el inventario.", e);
+    }
+
+  } else if (accion === "2") {
+    const nR = prompt("Nuevo Rack:", pucho.rack);
+    const nL = prompt("Nuevo Lado (A/B):", pucho.lado);
+    const nP = prompt("Nueva Posición (1-29):", pucho.posicion);
+    if (!nR || !nL || !nP) return;
+
+    try {
+      const r = await apiPost({
+        action: "updateInventarioByTraz",
+        trazabilidad: pucho.trazabilidad,
+        data: { "Rack": nR, "Lado": nL, "Posición": nP }
+      });
+      if (!r.ok) throw new Error(r.error || "No ok");
+      alert("🚚 Pucho movido.");
+      await conectarCerebro();
+      mostrarPantalla("pantalla-inicio");
+    } catch (e) {
+      alertError("No pude mover el pucho.", e);
+    }
+  }
+}
+
+// === 10) BUSCADOR GLOBAL ===
+function ejecutarBusquedaGlobal(valor) {
+  const contenedor = $("resultados-busqueda");
+  const bus = (valor || "").trim();
+  if (!bus) {
+    contenedor.classList.add("hidden");
+    contenedor.innerHTML = "";
+    return;
+  }
+
+  const encontrados = puchoData.filter(p => {
+    const skuPucho = (p.sku || "").toString();
+    const nombre = (p.producto || "").toString().toLowerCase();
+    return skuPucho.includes(bus) || nombre.includes(bus.toLowerCase());
+  });
+
+  contenedor.classList.remove("hidden");
+  contenedor.innerHTML = encontrados.length > 0 ? "" : `<p class="p-4 text-red-500 font-bold text-center">SIN RESULTADOS PARA "${bus}"</p>`;
+
+  encontrados.forEach(p => {
+    contenedor.innerHTML += `
+      <div class="bg-white border-2 border-primary/20 p-4 rounded-2xl mb-3 flex justify-between items-center shadow-sm">
+        <div>
+          <b class="text-primary text-lg">SKU: ${(p.sku || "S/D")}</b>
+          <p class="text-[10px] font-bold text-gray-400 uppercase">${p.producto}</p>
+          <div class="flex gap-2 mt-1">
+            <span class="bg-primary text-white text-[9px] px-2 py-0.5 rounded">${p.rack}-${p.lado}${p.posicion}</span>
+            <span class="bg-gray-100 text-gray-500 text-[9px] px-2 py-0.5 rounded">Traz: ${p.trazabilidad}</span>
+          </div>
+        </div>
+        <button onclick="gestionarPosicion('${p.rack}', '${p.lado}', ${p.posicion})"
+          class="bg-primary text-white px-4 py-2 rounded-xl font-black text-xs active:scale-95 transition-all">
+          GESTIONAR
+        </button>
+      </div>`;
+  });
+}
+
+// === 11) INVENTARIO / EXPORT ===
+function mostrarInventario() {
+  mostrarPantalla("pantalla-inv");
+  let html = `<table class="w-full text-xs text-left">
+    <thead class="bg-gray-100 font-black">
+      <tr><th class="p-2">PRODUCTO</th><th class="p-2 text-center">CANT</th><th class="p-2">UBIC</th></tr>
+    </thead><tbody class="divide-y">`;
+
+  puchoData.forEach(p => {
+    html += `<tr>
+      <td class="p-2 font-bold">${p.producto}</td>
+      <td class="p-2 text-center">${p.cantidad}</td>
+      <td class="p-2">${p.rack}-${p.lado}${p.posicion}</td>
+    </tr>`;
+  });
+
+  $("lista-puchos").innerHTML = html + "</tbody></table>";
+}
+
+function descargarExcel() {
+  // CSV simple (lo abrís con Excel)
+  const headers = ["Fecha","SKU","Producto","Cantidad","Trazabilidad","Rack","Lado","Posición","Vencimiento","Usuario"];
+  const rows = puchoData.map(p => [
+    p.fecha, p.sku, p.producto, p.cantidad, p.trazabilidad, p.rack, p.lado, p.posicion, p.vencimiento, p.operario
+  ]);
+
+  const csv = [headers, ...rows]
+    .map(r => r.map(x => `"${(x ?? "").toString().replaceAll('"','""')}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `inventario_terminal_${TERMINAL_ID}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// === 12) STATS ===
+function calcularStats() {
+  const total = puchoData.length;
+
+  const ocupadas = new Set(
+    puchoData
+      .filter(p => p.rack && p.lado && p.posicion)
+      .map(p => `${p.rack}-${p.lado}-${p.posicion}`)
+  ).size;
+
+  const ocupacion = Math.round((ocupadas / TOTAL_SLOTS) * 100);
+
+  let criticos = 0;
+  puchoData.forEach(p => {
+    const clase = obtenerClaseVencimiento(p.vencimiento);
+    if (clase.includes("bg-red-600") || clase.includes("bg-black")) criticos++;
+  });
+
+  $("stat-total").innerText = total;
+  $("stat-criticos").innerText = criticos;
+  $("stat-ocupacion").innerText = `${ocupacion}%`;
+  $("bar-ocupacion").style.width = `${ocupacion}%`;
+
+  mostrarPantalla("pantalla-stats");
+}
+
+function obtenerClaseVencimiento(f) {
+  if(!f) return "bg-emerald-500 text-white";
+  const now = new Date();
+  const dt = new Date(f);
+  if (isNaN(dt.getTime())) return "bg-emerald-500 text-white";
+  const months = (dt - now) / (1000*60*60*24*30);
+
+  if (months < 0) return "bg-black text-white";                    // vencido
+  if (months <= 3) return "bg-red-600 text-white animate-pulse";   // crítico
+  if (months <= 5) return "bg-yellow-400 text-primary";            // alerta
+  return "bg-emerald-500 text-white";                              // ok
+}
+
+// === 13) BOOT ===
+window.onload = async () => {
+  await conectarCerebro();
+  if (operarioLogueado) mostrarPantalla("pantalla-inicio");
+  else mostrarPantalla("pantalla-bienvenida");
+};
+</script>
+``
+
+
+</script>

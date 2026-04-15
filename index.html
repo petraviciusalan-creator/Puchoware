@@ -554,36 +554,21 @@ async function cargarFallbackLocal() {
 }
 
 // === 6) LOGIN / PERFIL ===
-async function intentarLogin() {
-  const usuario = document.getElementById("user").value.trim();
-  const clave = document.getElementById("pass").value.trim();
+function intentarLogin() {
+  const u = safeLower($("user").value).trim();
+  const p = $("pass").value;
 
-  if (!usuario || !clave) {
-    alert("Completá usuario y contraseña");
-    return;
-  }
+  const claveLocal = clavesLocal[u];
+  const clave = (claveLocal !== undefined ? claveLocal : clavesDefault[u]);
 
-  try {
-    const res = await apiPost({
-      token: APP_TOKEN,
-      action: "login",
-      usuario: usuario,
-      clave: clave
-    });
-
-    if (res.ok) {
-      localStorage.setItem("operarioActual", usuario);
-      operarioLogueado = usuario;
-      showToast("✅ Bienvenido");
-      mostrarPantalla("pantalla-inicio");
-    } else {
-      alert("❌ Usuario o contraseña incorrectos");
-    }
-  } catch (e) {
-    alert("❌ Error de conexión con el servidor");
+  if (clave === p) {
+    localStorage.setItem("operarioActual", u);
+    operarioLogueado = u;
+    mostrarPantalla("pantalla-inicio");
+  } else {
+    alert("Clave incorrecta");
   }
 }
-
 
 function cerrarSesion() {
   localStorage.removeItem("operarioActual");

@@ -400,6 +400,7 @@ const TOTAL_RACKS = 8;
 const TOTAL_LADOS = 2;
 const POSICIONES_POR_LADO = 29;
 const TOTAL_SLOTS = TOTAL_RACKS * TOTAL_LADOS * POSICIONES_POR_LADO;
+const APP_TOKEN = "PUCHOWARE-2026-INTERNO";
 
 // === 1) ESTADO GLOBAL ===
 let PRODUCTOS_MAESTRO = [];           // para escáner (Maestro)
@@ -631,7 +632,14 @@ wrap.classList.remove("hidden")
         const encontrado = buscarProductoEnMaestro(code);
 
         if (encontrado) {
+             if (navigator.vibrate) {
+        navigator.vibrate(150);
+        }
+            playBeep();
+
           productoActual = encontrado;
+       
+         
 
           await html5QrCode.stop().catch(() => {});
           html5QrCode = null;
@@ -724,7 +732,7 @@ function buscarProductoEnMaestro(code) {
 
   return null;
 }
-``
+
 
 
 // === 8) CARGA / GUARDADO EN INVENTARIO ===
@@ -752,6 +760,7 @@ if (repetida) {
   const vence = $("vence").value;
 
   const payload = {
+    token: APP_TOKEN,
     action: "addInventario",
     data: {
       "Fecha": new Date().toLocaleString(),
@@ -929,6 +938,9 @@ function ejecutarBusquedaGlobal(valor) {
         <div>
           <b class="text-primary text-lg">SKU: ${(p.sku || "S/D")}</b>
           <p class="text-[10px] font-bold text-gray-400 uppercase">${p.producto}</p>
+          <p class="text-[10px] font-black text-primary">
+             Stock: ${p.cantidad}
+          </p>
           <div class="flex gap-2 mt-1">
             <span class="bg-primary text-white text-[9px] px-2 py-0.5 rounded">${p.rack}-${p.lado}${p.posicion}</span>
             <span class="bg-gray-100 text-gray-500 text-[9px] px-2 py-0.5 rounded">Traz: ${p.trazabilidad}</span>
@@ -1017,6 +1029,19 @@ function calcularStats() {
     t.classList.add("hidden");
   }, ms);
 }
+       function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, ctx.currentTime); // tono
+    osc.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.12);
+  } catch (e) {
+    // si el navegador no deja, no pasa nada
+  }
+}
 
 
 
@@ -1040,7 +1065,7 @@ window.onload = async () => {
   else mostrarPantalla("pantalla-bienvenida");
 };
 </script>
-``
+
 
 
 </script>

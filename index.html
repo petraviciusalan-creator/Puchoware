@@ -54,6 +54,13 @@
             transform: scale(0.95);
         }
     </style>
+    <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+</script>
 
 </head>
 

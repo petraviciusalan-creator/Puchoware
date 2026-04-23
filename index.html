@@ -54,6 +54,9 @@
         .btn-granix:active {
             transform: scale(0.95);
         }
+        .pantalla {
+  display: none;
+}
     </style>
     <script>
   if ("serviceWorker" in navigator) {
@@ -69,7 +72,7 @@
     <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-4 py-2 rounded-lg shadow-lg">
         <p id="toast-message"></p>
     </div>
-    <main id="pantalla-bienvenida" class="w-full max-w-[450px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[600px]">
+    <main id="pantalla-bienvenida" class="pantalla w-full max-w-[450px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col min-h-[600px]">
     <section class="bg-[#003857] p-10 flex-1 flex flex-col justify-center relative overflow-hidden text-white">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop" 
@@ -103,7 +106,7 @@
     </section>
 </main>
 
-   <main id="pantalla-login" class="w-full max-w-[1100px] flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-2xl min-h-[600px]">
+   <main id="pantalla-login" class="pantalla w-full max-w-[1100px] flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-2xl min-h-[600px]">
         
         <section class="hidden md:flex flex-col justify-between w-1/2 bg-[#003857] p-12 relative overflow-hidden text-white">
             <div class="absolute inset-0 z-0">
@@ -177,7 +180,7 @@
         </section>
     </main>
 
-    <main id="pantalla-inicio" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+    <main id="pantalla-inicio" class="pantalla hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
         <div class="text-center mb-6">
             <h2 class="text-xl font-black text-primary uppercase">Panel de Control</h2>
             <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center gap-2">
@@ -232,7 +235,7 @@
 </div>
     </main>
 
-    <main id="pantalla-carga" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
+    <main id="pantalla-carga" class="pantalla hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
         <h3 class="text-2xl font-black text-[#003857] mb-6 border-b pb-4" id="nombre-prod-display">Producto</h3>
         <p id="sku-prod-display" class="text-xs font-black text-gray-400 mb-6 uppercase tracking-widest"></p>
         
@@ -286,7 +289,7 @@
         </div>
     </main>
 
-    <main id="pantalla-inv" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl">
+    <main id="pantalla-inv" class="pantalla hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-black text-primary uppercase">Inventario Local</h3>
             <button onclick="descargarExcel()" class="text-primary"><span class="material-symbols-outlined">download</span></button>
@@ -295,7 +298,7 @@
         <button onclick="mostrarPantalla('pantalla-inicio')" class="w-full h-14 bg-primary text-white rounded-xl font-bold">VOLVER</button>
     </main>
 
-    <main id="pantalla-config" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
+    <main id="pantalla-config" class="pantalla hidden-screen w-full max-w-md bg-white rounded-2xl p-8 shadow-xl">
         <h3 class="text-2xl font-black text-primary mb-6">Cambiar Clave</h3>
         <div class="space-y-6">
             <div>
@@ -306,7 +309,7 @@
             <button onclick="mostrarPantalla('pantalla-inicio')" class="w-full h-12 text-gray-400 font-bold">CANCELAR</button>
         </div>
     </main>
-    <main id="pantalla-ubicaciones" class="hidden-screen w-full max-w-7xl mx-auto px-4 pb-32">
+    <main id="pantalla-ubicaciones" class="pantalla hidden-screen w-full max-w-7xl mx-auto px-4 pb-32">
         
         <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 pt-4">
             <div class="space-y-1">
@@ -353,7 +356,7 @@
             </div>
         </div>
     </main>
-    <main id="pantalla-rack-detalle" class="hidden-screen w-full max-w-7xl mx-auto px-4 pb-20">
+    <main id="pantalla-rack-detalle" class="pantalla hidden-screen w-full max-w-7xl mx-auto px-4 pb-20">
         <header class="py-8 flex justify-between items-center">
             <div>
                 <h2 id="titulo-rack" class="text-4xl font-black text-[#003857] uppercase tracking-tighter">Rack --</h2>
@@ -376,7 +379,7 @@
             </div>
         </div>
     </main>
-    <main id="pantalla-stats" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
+    <main id="pantalla-stats" class="pantalla hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
     <h3 class="text-2xl font-black text-primary mb-6 border-b pb-4">ESTADO DEL DEPÓSITO</h3>
     
     <div class="grid grid-cols-2 gap-4 mb-8">
@@ -463,22 +466,18 @@ function alertError(msg, err) {
 
 // === 3) NAVEGACIÓN ===
 function mostrarPantalla(id) {
-  const pantallas = [
-    "pantalla-bienvenida","pantalla-login","pantalla-inicio","pantalla-carga",
-    "pantalla-inv","pantalla-config","pantalla-ubicaciones","pantalla-rack-detalle","pantalla-stats"
-  ];
-  pantallas.forEach(p => {
-    const el = $(p);
-    if (el) el.classList.add("hidden-screen");
+  document.querySelectorAll(".pantalla").forEach(p => {
+    p.classList.add("hidden-screen");
   });
-  const actual = $(id);
+
+  const actual = document.getElementById(id);
   if (actual) actual.classList.remove("hidden-screen");
 
   if (id === "pantalla-inicio" && operarioLogueado) {
-    $("nombre-operario-cartel").innerText = safeUpper(operarioLogueado);
+    document.getElementById("nombre-operario-cartel").innerText =
+      safeUpper(operarioLogueado);
   }
 }
-
 // === 4) API (Apps Script) ===
 // Apps Script suele redirigir a script.googleusercontent.com, por eso mantenemos redirect: "follow". [2](https://developers.google.com/apps-script/guides/content)
 async function apiGet(sheet) {
@@ -656,10 +655,15 @@ wrap.classList.remove("hidden")
        
          
 
-          await html5QrCode.stop().catch(() => {});
-          html5QrCode = null;
+         await html5QrCode.stop().catch(() => {});
+         html5QrCode = null;
 
-          reader.classList.add("hidden");
+          // 🔑 LIMPIEZA REAL DEL ESCÁNER
+          const reader = document.getElementById("reader");
+          reader.innerHTML = "";          // elimina video/canvas
+          reader.classList.add("hidden"); // oculta el contenedor
+
+          $("scanner-wrap").classList.add("hidden");
           $("btn-detener").classList.add("hidden");
 
           $("nombre-prod-display").innerText = encontrado.Producto || "Producto";
@@ -690,16 +694,23 @@ wrap.classList.remove("hidden")
 async function detenerEscaneo() {
   try {
     if (html5QrCode) {
-      await html5QrCode.stop();
+      await html5QrCode.stop().catch(() => {});
       html5QrCode = null;
     }
-    $("reader").classList.add("hidden");
+
+    const reader = $("reader");
+    reader.innerHTML = "";          // 🔑 limpia video/canvas
+    reader.classList.add("hidden");
+
+    $("scanner-wrap").classList.add("hidden");
     $("btn-detener").classList.add("hidden");
-    console.log("✅ Cámara apagada");
+
+    console.log("✅ Cámara apagada y escáner limpio");
   } catch (e) {
     console.error("No se pudo detener", e);
   }
 }
+
 
 function buscarProductoEnMaestro(code) {
   const scanned = normalizarCodigo(code);

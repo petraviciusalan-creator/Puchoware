@@ -569,21 +569,39 @@ async function cargarFallbackLocal() {
 }
 
 // === 6) LOGIN / PERFIL ===
-function intentarLogin() {
-  const u = safeLower($("user").value).trim();
-  const p = $("pass").value;
+async function intentarLogin() {
+  const usuario = safeLower($("user").value).trim();
+  const clave = $("pass").value;
 
-  const claveLocal = clavesLocal[u];
-  const clave = (claveLocal !== undefined ? claveLocal : clavesDefault[u]);
+  if (!usuario || !clave) {
+    return alert("Completá usuario y contraseña");
+  }
 
-  if (clave === p) {
-    localStorage.setItem("operarioActual", u);
-    operarioLogueado = u;
-    mostrarPantalla("pantalla-inicio");
-  } else {
-    alert("Clave incorrecta");
+  try {
+    const r = await apiPost({
+      action: "login",
+      usuario: usuario,
+      clave: clave
+    });
+
+    if (r.ok) {
+      // guardo sesión local (solo usuario/nombre, NO contraseña)
+      localStorage.setItem("operarioActual", usuario);
+      operarioLogueado = usuario;
+
+      // si Apps Script devuelve nombre, lo guardamos también
+      if (r.nombre) localStorage.setItem("operarioNombre", r.nombre);
+
+      mostrarPantalla("pantalla-inicio");
+    } else {
+      alert("❌ " + (r.error || "Usuario o contraseña incorrectos"));
+    }
+  } catch (e) {
+    console.error(e);
+    alert("⚠️ No se pudo conectar al servidor (Apps Script).");
   }
 }
+
 
 function cerrarSesion() {
   localStorage.removeItem("operarioActual");

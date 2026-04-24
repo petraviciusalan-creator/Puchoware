@@ -8,12 +8,12 @@
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/Puchoware/icons/icon-192-cropped.png",
+      "src": "/Puchoware/icons/icon-192-solid.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/Puchoware/icons/icon-512-cropped.png",
+      "src": "/Puchoware/icons/icon-512-solid.png",
       "sizes": "512x512",
       "type": "image/png"
     }

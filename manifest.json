@@ -1,6 +1,6 @@
 {
   "name": "Puchoware",
-  "short_name": "Pucho",
+  "short_name": "PuchoWare",
   "start_url": "/Puchoware/",
   "scope": "/Puchoware/",
   "display": "standalone",
@@ -8,12 +8,12 @@
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/Puchoware/icons/icon-192.png",
+      "src": "/Puchoware/icons/icon-192-cropped.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/Puchoware/icons/icon-512.png",
+      "src": "/Puchoware/icons/icon-512-cropped.png",
       "sizes": "512x512",
       "type": "image/png"
     }

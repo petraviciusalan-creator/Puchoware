@@ -12,11 +12,11 @@
     <link rel="on
       <meta name="theme-color" content="#1B4F72">
     
-    <link rel="manifest" href="./manifest.json?v=2">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#0f172a">
 
 <!-- iOS -->
-   <link rel="apple-touch-icon" href="./icons/apple-touch-icon-solid.png
+     <link rel="apple-touch-icon" href="./icons/icon-solid.png">
      <meta name="apple-mobile-web-app-capable" content="yes">
      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -103,7 +103,7 @@
     </section>
 </main>
 
-   <main id="pantalla-login" class="hidden-screen" class="w-full max-w-[1100px] flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-2xl min-h-[600px]">
+   <main id="pantalla-login" class="w-full max-w-[1100px] flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-2xl min-h-[600px]">
         
         <section class="hidden md:flex flex-col justify-between w-1/2 bg-[#003857] p-12 relative overflow-hidden text-white">
             <div class="absolute inset-0 z-0">
@@ -177,7 +177,7 @@
         </section>
     </main>
 
-    <main id="pantalla-inicio" class="hidden-screen" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
+    <main id="pantalla-inicio" class="hidden-screen w-full max-w-md bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
         <div class="text-center mb-6">
             <h2 class="text-xl font-black text-primary uppercase">Panel de Control</h2>
             <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center gap-2">
@@ -569,39 +569,21 @@ async function cargarFallbackLocal() {
 }
 
 // === 6) LOGIN / PERFIL ===
-async function intentarLogin() {
-  const usuario = safeLower($("user").value).trim();
-  const clave = $("pass").value;
+function intentarLogin() {
+  const u = safeLower($("user").value).trim();
+  const p = $("pass").value;
 
-  if (!usuario || !clave) {
-    return alert("Completá usuario y contraseña");
-  }
+  const claveLocal = clavesLocal[u];
+  const clave = (claveLocal !== undefined ? claveLocal : clavesDefault[u]);
 
-  try {
-    const r = await apiPost({
-      action: "login",
-      usuario: usuario,
-      clave: clave
-    });
-
-    if (r.ok) {
-      // guardo sesión local (solo usuario/nombre, NO contraseña)
-      localStorage.setItem("operarioActual", usuario);
-      operarioLogueado = usuario;
-
-      // si Apps Script devuelve nombre, lo guardamos también
-      if (r.nombre) localStorage.setItem("operarioNombre", r.nombre);
-
-      mostrarPantalla("pantalla-inicio");
-    } else {
-      alert("❌ " + (r.error || "Usuario o contraseña incorrectos"));
-    }
-  } catch (e) {
-    console.error(e);
-    alert("⚠️ No se pudo conectar al servidor (Apps Script).");
+  if (clave === p) {
+    localStorage.setItem("operarioActual", u);
+    operarioLogueado = u;
+    mostrarPantalla("pantalla-inicio");
+  } else {
+    alert("Clave incorrecta");
   }
 }
-
 
 function cerrarSesion() {
   localStorage.removeItem("operarioActual");

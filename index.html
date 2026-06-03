@@ -253,7 +253,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Rack (1-8)</label>
-                    <select id="rack" onchange="actualizarMaxPosicion()" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+                    <select id="rack" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
                         <option value="R1">R1</option><option value="R2">R2</option>
                         <option value="R3">R3</option><option value="R4">R4</option>
                         <option value="R5">R5</option><option value="R6">R6</option>
@@ -268,17 +268,12 @@
                     </select>
                 </div>
             </div>
-            
+
             <div>
-    <label id="label-posicion" class="text-xs font-bold text-gray-400 uppercase tracking-widest">
-        Posición
-    </label>
-    <input type="number" id="pos" min="1" max="38"
-           class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]"
-           placeholder="Ej: 15">
-</div>
-            
-            <div class="mt-4">
+                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Posición (1-29)</label>
+                <input type="number" id="pos" min="1" max="29" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]" placeholder="Ej: 15">
+            </div>
+             <div class="mt-4">
              <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Fecha de Vencimiento</label>
               <input type="date" id="vence" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857] focus:ring-2 focus:ring-primary">
             </div>
@@ -369,21 +364,13 @@
 
         <div class="grid grid-cols-1 gap-8">
             <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                
-             <h3 id="titulo-lado-a" class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">
-             Lado A (Superior)
-             </h3>
-
+                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado A (Superior) - 29 Posiciones</h3>
                 <div id="grid-lado-a" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
                     </div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                
-             <h3 id="titulo-lado-b" class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">
-               Lado B (Inferior)
-              </h3>
-
+                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado B (Inferior) - 29 Posiciones</h3>
                 <div id="grid-lado-b" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
                     </div>
             </div>
@@ -426,24 +413,8 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxH3o5fAVLurow
 const TERMINAL_ID = "042";
 const TOTAL_RACKS = 8;
 const TOTAL_LADOS = 2;
-const POSICIONES_POR_RACK = {
-  R1: 38,
-  R2: 30,
-  R3: 30,
-  R4: 30,
-  R5: 30,
-  R6: 30,
-  R7: 30,
-  R8: 30
-};
-
-function getPosicionesPorRack(rackId) {
-  return POSICIONES_POR_RACK[rackId] || 30;
-}
-
-const TOTAL_SLOTS = Object.values(POSICIONES_POR_RACK)
-  .reduce((acc, cantidad) => acc + (cantidad * TOTAL_LADOS), 0);
-
+const POSICIONES_POR_LADO = 29;
+const TOTAL_SLOTS = TOTAL_RACKS * TOTAL_LADOS * POSICIONES_POR_LADO;
 const APP_TOKEN = "PUCHOWARE-2026-INTERNO";
 
 // === 1) ESTADO GLOBAL ===
@@ -698,8 +669,7 @@ wrap.classList.remove("hidden")
           $("trazabilidad").value = "";
           $("pos").value = "";
           $("vence").value = todayISO();
-            
-          actualizarMaxPosicion();
+
           mostrarPantalla("pantalla-carga");
         } else {
           alert(`⚠️ No encontré el código "${code}" en Maestro ni en Productos.`);
@@ -713,23 +683,8 @@ wrap.classList.remove("hidden")
     $("btn-detener").classList.add("hidden");
   }
 }
+``
 
-       function actualizarMaxPosicion() {
-  const rack = $("rack").value;
-  const maxPos = getPosicionesPorRack(rack);
-
-  const inputPos = $("pos");
-  const labelPos = $("label-posicion");
-
-  if (inputPos) {
-    inputPos.max = maxPos;
-    inputPos.placeholder = `Ej: ${Math.min(15, maxPos)}`;
-  }
-
-  if (labelPos) {
-    labelPos.innerText = `Posición (1-${maxPos})`;
-  }
-}
 
 
 async function detenerEscaneo() {
@@ -815,12 +770,7 @@ if (repetida) {
   const rack = $("rack").value;
   const lado = $("lado").value;
   const pos = $("pos").value.trim();
-const maxPos = getPosicionesPorRack(rack);
-
-if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
-  return alert(`Posición inválida para ${rack} (1-${maxPos}).`);
-}
-
+  if (!pos || parseInt(pos,10) < 1 || parseInt(pos,10) > 29) return alert("Posición inválida (1-29).");
 
   const vence = $("vence").value;
 
@@ -860,7 +810,6 @@ function ingresoManualSKU() {
     productoActual = { SKU: e.codigo, Producto: e.nombre };
     $("nombre-prod-display").innerText = e.nombre || `SKU ${e.codigo}`;
     $("vence").value = todayISO();
-    actualizarMaxPosicion();
     mostrarPantalla("pantalla-carga");
   } else {
     // Intento también por Maestro
@@ -869,7 +818,6 @@ function ingresoManualSKU() {
       productoActual = m;
       $("nombre-prod-display").innerText = m.Producto;
       $("vence").value = todayISO();
-      actualizarMaxPosicion();
       mostrarPantalla("pantalla-carga");
     } else {
       alert("No encontrado en maestro.");
@@ -879,17 +827,10 @@ function ingresoManualSKU() {
 
 // === 9) UBICACIONES / MAPA ===
 function abrirDetalleRack(rackId) {
-  const totalPosiciones = getPosicionesPorRack(rackId);
-
   $("titulo-rack").innerText = "VISTA RACK " + rackId;
-  $("titulo-lado-a").innerText = `Lado A (Superior) - ${totalPosiciones} Posiciones`;
-  $("titulo-lado-b").innerText = `Lado B (Inferior) - ${totalPosiciones} Posiciones`;
-
   mostrarPantalla("pantalla-rack-detalle");
   dibujarNivel("grid-lado-a", rackId, "A");
   dibujarNivel("grid-lado-b", rackId, "B");
-}
-
 }
 
 function dibujarNivel(contenedorId, rackId, lado) {
@@ -897,10 +838,7 @@ function dibujarNivel(contenedorId, rackId, lado) {
   if (!grid) return;
   grid.innerHTML = "";
 
-const totalPosiciones = getPosicionesPorRack(rackId);
-
-  for (let i = 1; i <= totalPosiciones; i++) {
-
+  for (let i = 1; i <= 29; i++) {
     const ocupantes = puchoData.filter(p =>
       p.rack === rackId &&
       p.lado === lado &&

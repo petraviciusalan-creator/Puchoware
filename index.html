@@ -253,7 +253,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Rack (1-8)</label>
-                    <select id="rack" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+                    <select id="rack" onchange="actualizarMaxPosicion()" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
                         <option value="R1">R1</option><option value="R2">R2</option>
                         <option value="R3">R3</option><option value="R4">R4</option>
                         <option value="R5">R5</option><option value="R6">R6</option>
@@ -268,12 +268,17 @@
                     </select>
                 </div>
             </div>
-
+            
             <div>
-                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Posición (1-29)</label>
-                <input type="number" id="pos" min="1" max="29" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]" placeholder="Ej: 15">
-            </div>
-             <div class="mt-4">
+    <label id="label-posicion" class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+        Posición
+    </label>
+    <input type="number" id="pos" min="1" max="38"
+           class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]"
+           placeholder="Ej: 15">
+</div>
+            
+            <div class="mt-4">
              <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Fecha de Vencimiento</label>
               <input type="date" id="vence" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857] focus:ring-2 focus:ring-primary">
             </div>
@@ -318,7 +323,7 @@
 
         <div class="flex flex-wrap gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-gray-200 border border-gray-300"></div><span class="text-[10px] font-black text-gray-400 uppercase">Vacío</span></div>
-            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> <span class="text-[10px] font-black text-gray-400 uppercase">Estable (+5 meses)</span>
+            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> <span class="text-[10px] font-black text-gray-400 uppercase">Estable (+5 meses)</span></div>
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-yellow-400"></div><span class="text-[10px] font-black text-gray-400 uppercase">Alerta (4-5 meses)</span></div>
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div><span class="text-[10px] font-black text-gray-400 uppercase">Crítico (2-3 meses)</span></div>
             <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-black"></div><span class="text-[10px] font-black text-gray-400 uppercase">Vencido</span></div>
@@ -364,13 +369,21 @@
 
         <div class="grid grid-cols-1 gap-8">
             <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado A (Superior) - 29 Posiciones</h3>
+                
+             <h3 id="titulo-lado-a" class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">
+             Lado A (Superior)
+             </h3>
+
                 <div id="grid-lado-a" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
                     </div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                <h3 class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">Lado B (Inferior) - 29 Posiciones</h3>
+                
+             <h3 id="titulo-lado-b" class="text-sm font-black text-gray-300 mb-6 uppercase tracking-widest border-b pb-2">
+               Lado B (Inferior)
+              </h3>
+
                 <div id="grid-lado-b" class="grid grid-cols-5 md:grid-cols-10 lg:grid-cols-[repeat(15,minmax(0,1fr))] gap-2">
                     </div>
             </div>
@@ -408,14 +421,29 @@
    <script>
 
 
-
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxH3o5fAVLurowrU3pe6QTO-B2aEOTDYWQUvFUlXYTiCUlemdjP0WtGW6DjYTNJIQ/exec"; // Ej: https://script.google.com/macros/s/XXXX/exec
+                          
+const APPS_SCRIPT_URL = " https://script.google.com/macros/s/AKfycbwRa9rDBilbXFRyoBfFNn-qhfJ_NprZhBCCNP1HBgHnft5D9bigLs2p83-YXKl8oEOP/exec"
 const TERMINAL_ID = "042";
 const TOTAL_RACKS = 8;
 const TOTAL_LADOS = 2;
-const POSICIONES_POR_LADO = 29;
-const TOTAL_SLOTS = TOTAL_RACKS * TOTAL_LADOS * POSICIONES_POR_LADO;
-const APP_TOKEN = "PUCHOWARE-2026-INTERNO";
+const POSICIONES_POR_RACK = {
+  R1: 38,
+  R2: 30,
+  R3: 30,
+  R4: 30,
+  R5: 30,
+  R6: 30,
+  R7: 30,
+  R8: 30
+};
+
+function getPosicionesPorRack(rackId) {
+  return POSICIONES_POR_RACK[rackId] || 30;
+}
+
+const TOTAL_SLOTS = Object.values(POSICIONES_POR_RACK)
+  .reduce((acc, cantidad) => acc + (cantidad * TOTAL_LADOS), 0);
+
 
 // === 1) ESTADO GLOBAL ===
 let PRODUCTOS_MAESTRO = [];           // para escáner (Maestro)
@@ -426,10 +454,7 @@ let productoActual = null;
 
 let operarioLogueado = localStorage.getItem("operarioActual");
 
-// Login local (mínimo) + posibilidad de cambio de clave en localStorage
-const clavesDefault = { "alan": "granix2026", "juan": "deposito1", "5039": "1234" };
-const clavesStorageKey = "puchoware_claves_local";
-const clavesLocal = JSON.parse(localStorage.getItem(clavesStorageKey) || "{}");
+
 
 // === 2) UTILIDADES ===
 const $ = (id) => document.getElementById(id);
@@ -442,7 +467,7 @@ function normalizarCodigo(str) {
   // deja solo números (por si el lector mete espacios o guiones)
   return (str || "").toString().replace(/\D/g, "").trim();
 }
-``
+
 
 function getAny(obj, keys) {
   if (!obj) return null;
@@ -481,25 +506,36 @@ function mostrarPantalla(id) {
 
 // === 4) API (Apps Script) ===
 // Apps Script suele redirigir a script.googleusercontent.com, por eso mantenemos redirect: "follow". [2](https://developers.google.com/apps-script/guides/content)
-async function apiGet(sheet) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_ACA")) throw new Error("Falta APPS_SCRIPT_URL");
-  const url = `${APPS_SCRIPT_URL}?action=get&sheet=${encodeURIComponent(sheet)}`;
-  const res = await fetch(url, { method: "GET", redirect: "follow" });
-  if (!res.ok) throw new Error(`GET ${sheet} -> ${res.status}`);
-  return await res.json();
+const getSesion = () => localStorage.getItem("sesionToken") || "";
+
+function sesionExpirada() {
+if (e.message === "SESION") { alert("Tu sesión expiró. Ingresá de nuevo."); mostrarPantalla("pantalla-login"); return; }
+  localStorage.removeItem("sesionToken");
+  localStorage.removeItem("operarioActual");
+  operarioLogueado = null;
+  throw new Error("SESION");
 }
 
-// Para evitar CORS/preflight con Apps Script, usamos Content-Type text/plain (simple request). [4](https://stackoverflow.com/questions/53433938/how-do-i-allow-a-cors-requests-in-my-google-script)[7](https://diyavijay.medium.com/struggling-with-cors-in-google-apps-script-heres-the-fix-e3eec09f07dd)
+async function apiGet(sheet) {
+  const url = `${APPS_SCRIPT_URL}?action=get&sheet=${encodeURIComponent(sheet)}&sesion=${encodeURIComponent(getSesion())}`;
+  const res = await fetch(url, { method: "GET", redirect: "follow" });
+  if (!res.ok) throw new Error(`GET ${sheet} -> ${res.status}`);
+  const j = await res.json();
+  if (j.error === "No autorizado") sesionExpirada();
+  return j;
+}
+
 async function apiPost(payload) {
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_ACA")) throw new Error("Falta APPS_SCRIPT_URL");
   const res = await fetch(APPS_SCRIPT_URL, {
     method: "POST",
     redirect: "follow",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ ...payload, sesion: getSesion() })
   });
   if (!res.ok) throw new Error(`POST -> ${res.status}`);
-  return await res.json();
+  const j = await res.json();
+  if (j.error === "No autorizado") sesionExpirada();
+  return j;
 }
 
 // === 5) CARGA DE DATOS (CEREBRO) ===
@@ -535,7 +571,7 @@ async function conectarCerebro() {
     dun14: (r["(SKU / DUN-14)"] ?? "").toString().trim(),
     nombre: (r["Nombre del Producto"] ?? "").toString().trim()
 }));
-``
+
 
     console.log("✅ OK:", {
       inventario: puchoData.length,
@@ -544,6 +580,11 @@ async function conectarCerebro() {
     });
 
   } catch (err) {
+    if (err.message === "SESION") {
+    alert("Tu sesión expiró. Ingresá de nuevo.");
+    mostrarPantalla("pantalla-login");
+    return;
+  }
     console.warn("⚠️ No se pudo sincronizar con Apps Script. Intentando fallback productos.json...", err);
     await cargarFallbackLocal();
   }
@@ -569,24 +610,25 @@ async function cargarFallbackLocal() {
 }
 
 // === 6) LOGIN / PERFIL ===
-function intentarLogin() {
+async function intentarLogin() {
   const u = safeLower($("user").value).trim();
   const p = $("pass").value;
-
-  const claveLocal = clavesLocal[u];
-  const clave = (claveLocal !== undefined ? claveLocal : clavesDefault[u]);
-
-  if (clave === p) {
+  try {
+    const r = await apiPost({ action: "login", user: u, pass: p });
+    if (!r.ok) return alert("❌ " + (r.error || "Legajo o clave incorrectos"));
     localStorage.setItem("operarioActual", u);
+    localStorage.setItem("sesionToken", r.sesion);
     operarioLogueado = u;
+    await conectarCerebro();
     mostrarPantalla("pantalla-inicio");
-  } else {
-    alert("Clave incorrecta");
+  } catch (e) {
+    alertError("No pude conectar con el servidor.", e);
   }
 }
 
 function cerrarSesion() {
   localStorage.removeItem("operarioActual");
+  localStorage.removeItem("sesionToken");
   location.reload();
 }
 
@@ -594,19 +636,21 @@ function olvideClave() {
   alert("📌 Recupero de clave: hablá con supervisión para reset. (Implementable con Apps Script si querés)");
 }
 
-function guardarNuevaPass() {
+async function guardarNuevaPass() {
   const nueva = $("nueva-pass").value.trim();
   if (nueva.length < 4) return alert("Mínimo 4 caracteres");
-  if (!operarioLogueado) return alert("No hay usuario logueado");
-  clavesLocal[operarioLogueado] = nueva;
-  localStorage.setItem(clavesStorageKey, JSON.stringify(clavesLocal));
-  alert("✅ Clave actualizada en este dispositivo.");
-  $("nueva-pass").value = "";
-  mostrarPantalla("pantalla-inicio");
+  try {
+    const r = await apiPost({ action: "changePass", nueva });
+    if (!r.ok) throw new Error(r.error || "No ok");
+    alert("✅ Clave actualizada.");
+    $("nueva-pass").value = "";
+    mostrarPantalla("pantalla-inicio");
+  } catch (e) {
+    if (e.message !== "SESION") alertError("No pude cambiar la clave.", e);
+  }
 }
 
-// === 7) ESCÁNER (html5-qrcode) ===
-// Nota: necesita HTTPS / localhost para permisos de cámara. [3](https://scanapp.org/html5-qrcode-docs/docs/intro)
+
 async function iniciarEscaneo() {
   const wrap = $("scanner-wrap");
 wrap.classList.remove("hidden")
@@ -659,7 +703,7 @@ wrap.classList.remove("hidden")
           await html5QrCode.stop().catch(() => {});
           html5QrCode = null;
 
-          reader.classList.add("hidden");
+          $("scanner-wrap").classList.add("hidden");
           $("btn-detener").classList.add("hidden");
 
           $("nombre-prod-display").innerText = encontrado.Producto || "Producto";
@@ -669,7 +713,8 @@ wrap.classList.remove("hidden")
           $("trazabilidad").value = "";
           $("pos").value = "";
           $("vence").value = todayISO();
-
+            
+          actualizarMaxPosicion();
           mostrarPantalla("pantalla-carga");
         } else {
           alert(`⚠️ No encontré el código "${code}" en Maestro ni en Productos.`);
@@ -683,8 +728,23 @@ wrap.classList.remove("hidden")
     $("btn-detener").classList.add("hidden");
   }
 }
-``
 
+       function actualizarMaxPosicion() {
+  const rack = $("rack").value;
+  const maxPos = getPosicionesPorRack(rack);
+
+  const inputPos = $("pos");
+  const labelPos = $("label-posicion");
+
+  if (inputPos) {
+    inputPos.max = maxPos;
+    inputPos.placeholder = `Ej: ${Math.min(15, maxPos)}`;
+  }
+
+  if (labelPos) {
+    labelPos.innerText = `Posición (1-${maxPos})`;
+  }
+}
 
 
 async function detenerEscaneo() {
@@ -693,7 +753,7 @@ async function detenerEscaneo() {
       await html5QrCode.stop();
       html5QrCode = null;
     }
-    $("reader").classList.add("hidden");
+    $("scanner-wrap").classList.add("hidden");
     $("btn-detener").classList.add("hidden");
     console.log("✅ Cámara apagada");
   } catch (e) {
@@ -770,7 +830,12 @@ if (repetida) {
   const rack = $("rack").value;
   const lado = $("lado").value;
   const pos = $("pos").value.trim();
-  if (!pos || parseInt(pos,10) < 1 || parseInt(pos,10) > 29) return alert("Posición inválida (1-29).");
+const maxPos = getPosicionesPorRack(rack);
+
+if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
+  return alert(`Posición inválida para ${rack} (1-${maxPos}).`);
+}
+
 
   const vence = $("vence").value;
 
@@ -810,6 +875,7 @@ function ingresoManualSKU() {
     productoActual = { SKU: e.codigo, Producto: e.nombre };
     $("nombre-prod-display").innerText = e.nombre || `SKU ${e.codigo}`;
     $("vence").value = todayISO();
+    actualizarMaxPosicion();
     mostrarPantalla("pantalla-carga");
   } else {
     // Intento también por Maestro
@@ -818,6 +884,7 @@ function ingresoManualSKU() {
       productoActual = m;
       $("nombre-prod-display").innerText = m.Producto;
       $("vence").value = todayISO();
+      actualizarMaxPosicion();
       mostrarPantalla("pantalla-carga");
     } else {
       alert("No encontrado en maestro.");
@@ -827,10 +894,17 @@ function ingresoManualSKU() {
 
 // === 9) UBICACIONES / MAPA ===
 function abrirDetalleRack(rackId) {
+  const totalPosiciones = getPosicionesPorRack(rackId);
+
   $("titulo-rack").innerText = "VISTA RACK " + rackId;
+  $("titulo-lado-a").innerText = `Lado A (Superior) - ${totalPosiciones} Posiciones`;
+  $("titulo-lado-b").innerText = `Lado B (Inferior) - ${totalPosiciones} Posiciones`;
+
   mostrarPantalla("pantalla-rack-detalle");
   dibujarNivel("grid-lado-a", rackId, "A");
   dibujarNivel("grid-lado-b", rackId, "B");
+
+
 }
 
 function dibujarNivel(contenedorId, rackId, lado) {
@@ -838,7 +912,10 @@ function dibujarNivel(contenedorId, rackId, lado) {
   if (!grid) return;
   grid.innerHTML = "";
 
-  for (let i = 1; i <= 29; i++) {
+const totalPosiciones = getPosicionesPorRack(rackId);
+
+  for (let i = 1; i <= totalPosiciones; i++) {
+
     const ocupantes = puchoData.filter(p =>
       p.rack === rackId &&
       p.lado === lado &&
@@ -1075,9 +1152,12 @@ function obtenerClaseVencimiento(f) {
 
 // === 13) BOOT ===
 window.onload = async () => {
-  await conectarCerebro();
-  if (operarioLogueado) mostrarPantalla("pantalla-inicio");
-  else mostrarPantalla("pantalla-bienvenida");
+  if (operarioLogueado) {
+    await conectarCerebro();
+    if (operarioLogueado) mostrarPantalla("pantalla-inicio");
+  } else {
+    mostrarPantalla("pantalla-bienvenida");
+  }
 };
 </script>
 

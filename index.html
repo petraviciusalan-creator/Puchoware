@@ -839,21 +839,8 @@ if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
 
   const vence = $("vence").value;
 
-  const payload = {
-    token: APP_TOKEN,
-    action: "addInventario",
-    data: {
-      "Fecha": new Date().toLocaleString(),
-      "SKU": productoActual.SKU,
-      "Producto": productoActual.Producto,
-      "Cantidad": cant,
-      "Trazabilidad": traz,
-      "Rack": rack,
-      "Lado": lado,
-      "Posición": pos,
-      "Vencimiento": vence,
-      "Usuario": operarioLogueado
-    }
+  
+    
   };
 
   try {

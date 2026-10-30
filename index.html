@@ -812,44 +812,63 @@ function buscarProductoEnMaestro(code) {
 
 // === 8) CARGA / GUARDADO EN INVENTARIO ===
 async function confirmarGuardado() {
-  if (!productoActual) return alert("Primero escaneá o elegí un SKU.");
-  if (!operarioLogueado) return alert("No hay operario logueado.");
-
-  const cant = parseInt($("cant").value || "0", 10);
-  if (!cant || cant <= 0) return alert("Ingresá una cantidad válida.");
-
-  const traz = $("trazabilidad").value.trim();
-  if (!traz) return alert("Ingresá Trazabilidad (manual).");
-  // ❌ No permitir trazabilidad repetida (chequeo local)
-const repetida = (puchoData || []).some(p => (p.trazabilidad || "").toString().trim() === traz);
-if (repetida) {
-  showToast("⚠️ Esa trazabilidad ya existe", 2200);
-  return alert("⚠️ Esa trazabilidad ya fue cargada. No se puede repetir.");
-}
-
-  const rack = $("rack").value;
-  const lado = $("lado").value;
-  const pos = $("pos").value.trim();
-const maxPos = getPosicionesPorRack(rack);
-
-if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
-  return alert(`Posición inválida para ${rack} (1-${maxPos}).`);
-}
-
-
-  const vence = $("vence").value;
-
-  
-    
-  };
-
   try {
+    if (!productoActual) return alert("Primero escaneá o elegí un SKU.");
+    if (!operarioLogueado) return alert("No hay operario logueado.");
+
+    const cant = parseInt($("cant").value || "0", 10);
+    if (!cant || cant <= 0) return alert("Ingresá una cantidad válida.");
+
+    const traz = $("trazabilidad").value.trim();
+    if (!traz) return alert("Ingresá Trazabilidad (manual).");
+
+    // No permitir trazabilidad repetida (chequeo local)
+    const repetida = (puchoData || []).some(
+      p => (p.trazabilidad || "").toString().trim() === traz
+    );
+    if (repetida) {
+      showToast("⚠️ Esa trazabilidad ya existe", 2200);
+      return alert("⚠️ Esa trazabilidad ya fue cargada. No se puede repetir.");
+    }
+
+    const rack = $("rack").value;
+    const lado = $("lado").value;
+    const pos = $("pos").value.trim();
+    const maxPos = getPosicionesPorRack(rack);
+
+    if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
+      return alert(`Posición inválida para ${rack} (1-${maxPos}).`);
+    }
+
+    const vence = $("vence").value;
+
+    const payload = {
+      action: "addInventario",
+      data: {
+        "Fecha": new Date().toLocaleString(),
+        "SKU": productoActual.SKU,
+        "Producto": productoActual.Producto,
+        "Cantidad": cant,
+        "Trazabilidad": traz,
+        "Rack": rack,
+        "Lado": lado,
+        "Posición": pos,
+        "Vencimiento": vence,
+        "Usuario": operarioLogueado
+      }
+    };
+
     const r = await apiPost(payload);
     if (!r.ok) throw new Error(r.error || "No ok");
     alert("✅ Guardado");
     await conectarCerebro();
     mostrarPantalla("pantalla-inicio");
   } catch (e) {
+    if (e.message === "SESION") {
+      alert("Tu sesión expiró. Ingresá de nuevo.");
+      mostrarPantalla("pantalla-login");
+      return;
+    }
     alertError("No pude guardar en el Excel (Apps Script).", e);
   }
 }

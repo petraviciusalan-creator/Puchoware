@@ -1270,15 +1270,15 @@ const ZONAS = {
 // Zona de cada rack ya existente en la app
 const RACK_A_ZONA = {
   R1: "Z4", R2: "Z4", R3: "Z4", R4: "Z4",
-  R5: "Z5", R6: "Z5", R7: "Z5", R8: "Z5"
+  R5: "Z3", R6: "Z3", R7: "Z3", R8: "Z3"
 };
 
 // Un pucho pertenece a la zona que tenga cargada; si no tiene, la de su rack
 const zonaDe = (p) => p.zona || RACK_A_ZONA[p.rack] || "";
        // Zonas que usan racks (Rack + Lado + Posición)
 const ZONAS_CON_RACK = {
-  Z4: ["R1", "R2", "R3", "R4"],
-  Z5: ["R5", "R6", "R7", "R8"]
+  Z3: ["R5", "R6", "R7", "R8"],
+  Z4: ["R1", "R2", "R3", "R4"]
 };
 
 // Zonas con filas: cantidad de filas y de posiciones por fila
@@ -1287,7 +1287,7 @@ const ZONAS_CON_RACK = {
 const ZONAS_FILAS = {
   Z1:  { filas: 6, pos: 40 },
   Z2:  { filas: 8, pos: 40 },
-  Z3:  { filas: 8, pos: 40 },
+  Z5:  { filas: 10, pos: 20 },
   PUL: { filas: 10, pos: 20 }
 };
 

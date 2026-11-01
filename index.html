@@ -254,32 +254,42 @@
             <p class="text-[10px] text-blue-400 mt-1 text-center font-bold">COPIAR DE LA ETIQUETA BLANCA</p>
         </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Rack (1-8)</label>
-                    <select id="rack" onchange="actualizarMaxPosicion()" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
-                        <option value="R1">R1</option><option value="R2">R2</option>
-                        <option value="R3">R3</option><option value="R4">R4</option>
-                        <option value="R5">R5</option><option value="R6">R6</option>
-                        <option value="R7">R7</option><option value="R8">R8</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Lado / Nivel</label>
-                    <select id="lado" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
-                        <option value="A">Lado A (Sup)</option>
-                        <option value="B">Lado B (Inf)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div>
-    <label id="label-posicion" class="text-xs font-bold text-gray-400 uppercase tracking-widest">
-        Posición
-    </label>
-    <input type="number" id="pos" min="1" max="38"
-           class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]"
-           placeholder="Ej: 15">
+           <div>
+    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Zona</label>
+    <select id="zona" onchange="cambiarZonaCarga()" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+        <option value="Z1">Zona 1</option>
+        <option value="Z2">Zona 2</option>
+        <option value="Z3">Zona 3</option>
+        <option value="Z4">Zona 4</option>
+        <option value="Z5">Zona 5 (Exportación)</option>
+        <option value="PUL">Pulmón</option>
+    </select>
+</div>
+
+<div id="bloque-rack">
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Rack</label>
+            <select id="rack" onchange="actualizarMaxPosicion()" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]"></select>
+        </div>
+        <div>
+            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Lado / Nivel</label>
+            <select id="lado" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]">
+                <option value="A">Lado A (Sup)</option>
+                <option value="B">Lado B (Inf)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div id="bloque-fila" class="hidden">
+    <label id="label-fila" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Fila</label>
+    <input type="number" id="fila" min="1" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]" placeholder="Ej: 3">
+</div>
+
+<div>
+    <label id="label-posicion" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Posición</label>
+    <input type="number" id="pos" min="1" class="w-full h-14 bg-gray-50 border-gray-200 rounded-xl text-center font-bold text-[#003857]" placeholder="Ej: 15">
 </div>
             
             <div class="mt-4">
@@ -416,6 +426,17 @@
     <div id="mapa-detalle" class="mt-4"></div>
 </main>
     
+    <main id="pantalla-zona-detalle" class="hidden-screen w-full max-w-7xl mx-auto px-4 pb-20">
+    <header class="py-6 flex justify-between items-center gap-2">
+        <div>
+            <h2 id="titulo-zona" class="text-3xl font-black text-[#003857] uppercase"></h2>
+            <p class="text-gray-400 font-bold text-xs uppercase tracking-widest">Cada cuadrado es una posición: de la entrada de la fila (izquierda) hacia el fondo (derecha)</p>
+        </div>
+        <button onclick="mostrarPantalla('pantalla-mapa')" class="bg-[#003857] text-white px-6 py-3 rounded-xl font-bold shadow-lg">VOLVER</button>
+    </header>
+    <div id="filas-zona" class="space-y-4"></div>
+</main>
+    
     <main id="pantalla-stats" class="hidden-screen w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
     <h3 class="text-2xl font-black text-primary mb-6 border-b pb-4">ESTADO DEL DEPÓSITO</h3>
     
@@ -518,7 +539,7 @@ function alertError(msg, err) {
 function mostrarPantalla(id) {
   const pantallas = [
     "pantalla-bienvenida","pantalla-login","pantalla-inicio","pantalla-carga",
-    "pantalla-inv","pantalla-config","pantalla-ubicaciones","pantalla-rack-detalle","pantalla-stats","pantalla-mapa"
+    "pantalla-inv","pantalla-config","pantalla-ubicaciones","pantalla-rack-detalle","pantalla-stats","pantalla-mapa","pantalla-zona-detalle"
   ];
   pantallas.forEach(p => {
     const el = $(p);
@@ -588,6 +609,7 @@ async function conectarCerebro() {
       vencimiento: getAny(p, ["Vencimiento","Vence","Fecha Vencimiento"]) || "",
       operario: getAny(p, ["Usuario","Operario","user"]) || "",
       zona: getAny(p, ["Zona"]) || "",
+      fila: getAny(p, ["Fila"]) || "",
         
     }));
 
@@ -757,24 +779,35 @@ wrap.classList.remove("hidden")
     $("btn-detener").classList.add("hidden");
   }
 }
-
-       function actualizarMaxPosicion() {
-  const rack = $("rack").value;
-  const maxPos = getPosicionesPorRack(rack);
-
-  const inputPos = $("pos");
-  const labelPos = $("label-posicion");
-
-  if (inputPos) {
-    inputPos.max = maxPos;
-    inputPos.placeholder = `Ej: ${Math.min(15, maxPos)}`;
+function cambiarZonaCarga() {
+  const z = $("zona").value;
+  const esRack = !!ZONAS_CON_RACK[z];
+  $("bloque-rack").classList.toggle("hidden", !esRack);
+  $("bloque-fila").classList.toggle("hidden", esRack);
+  if (esRack) {
+    $("rack").innerHTML = ZONAS_CON_RACK[z].map(r => `<option value="${r}">${r}</option>`).join("");
   }
-
-  if (labelPos) {
-    labelPos.innerText = `Posición (1-${maxPos})`;
-  }
+  actualizarMaxPosicion();
 }
 
+function actualizarMaxPosicion() {
+  const z = $("zona").value;
+  const esRack = !!ZONAS_CON_RACK[z];
+  const inputPos = $("pos");
+
+  if (esRack) {
+    if (!$("rack").options.length) cambiarZonaCarga();
+    const maxPos = getPosicionesPorRack($("rack").value);
+    inputPos.max = maxPos;
+    $("label-posicion").innerText = `Posición (1-${maxPos})`;
+  } else {
+    const cfg = ZONAS_FILAS[z];
+    inputPos.max = cfg.pos;
+    $("fila").max = cfg.filas;
+    $("label-fila").innerText = `Fila (1-${cfg.filas})`;
+    $("label-posicion").innerText = `Posición en la fila (1 = entrada, ${cfg.pos} = fondo)`;
+  }
+}
 
 async function detenerEscaneo() {
   try {
@@ -851,7 +884,6 @@ async function confirmarGuardado() {
     const traz = $("trazabilidad").value.trim();
     if (!traz) return alert("Ingresá Trazabilidad (manual).");
 
-    // No permitir trazabilidad repetida (chequeo local)
     const repetida = (puchoData || []).some(
       p => (p.trazabilidad || "").toString().trim() === traz
     );
@@ -860,16 +892,27 @@ async function confirmarGuardado() {
       return alert("⚠️ Esa trazabilidad ya fue cargada. No se puede repetir.");
     }
 
-    const rack = $("rack").value;
-    const lado = $("lado").value;
-    const pos = $("pos").value.trim();
-    const maxPos = getPosicionesPorRack(rack);
+    const zona = $("zona").value;
+    const esRack = !!ZONAS_CON_RACK[zona];
+    const pos = parseInt($("pos").value, 10);
+    let rack = "", lado = "", fila = "", maxPos;
 
-    if (!pos || parseInt(pos, 10) < 1 || parseInt(pos, 10) > maxPos) {
-      return alert(`Posición inválida para ${rack} (1-${maxPos}).`);
+    if (esRack) {
+      rack = $("rack").value;
+      lado = $("lado").value;
+      maxPos = getPosicionesPorRack(rack);
+    } else {
+      const cfg = ZONAS_FILAS[zona];
+      fila = parseInt($("fila").value, 10);
+      if (!fila || fila < 1 || fila > cfg.filas) {
+        return alert(`Fila inválida para ${ZONAS[zona]} (1-${cfg.filas}).`);
+      }
+      maxPos = cfg.pos;
     }
 
-    const vence = $("vence").value;
+    if (!pos || pos < 1 || pos > maxPos) {
+      return alert(`Posición inválida (1-${maxPos}).`);
+    }
 
     const payload = {
       action: "addInventario",
@@ -879,10 +922,12 @@ async function confirmarGuardado() {
         "Producto": productoActual.Producto,
         "Cantidad": cant,
         "Trazabilidad": traz,
+        "Zona": zona,
         "Rack": rack,
         "Lado": lado,
+        "Fila": fila,
         "Posición": pos,
-        "Vencimiento": vence,
+        "Vencimiento": $("vence").value,
         "Usuario": operarioLogueado
       }
     };
@@ -972,71 +1017,99 @@ const totalPosiciones = getPosicionesPorRack(rackId);
 }
 
 async function gestionarPosicion(rack, lado, pos) {
-  const ocupantes = puchoData.filter(p => p.rack === rack && p.lado === lado && String(p.posicion) == String(pos));
-  if (ocupantes.length === 0) return alert(`Posición ${rack}-${lado}${pos} VACÍA`);
+  const oc = puchoData.filter(p => p.rack === rack && p.lado === lado && String(p.posicion) == String(pos));
+  return elegirYGestionar(oc, `${rack}-${lado}${pos}`);
+}
 
-  let msj = `📦 GESTIÓN: ${rack}-${lado}${pos}\nSeleccione un producto:\n\n`;
-  ocupantes.forEach((p, idx) => msj += `${idx + 1}. ${p.producto} (Stock: ${p.cantidad}) (Vence: ${p.vencimiento || "S/F"})\n`);
+async function gestionarCasillero(zona, fila, pos) {
+  const oc = puchoData.filter(p =>
+    zonaDe(p) === zona && String(p.fila) === String(fila) && String(p.posicion) === String(pos));
+  return elegirYGestionar(oc, `${ZONAS[zona]} F${fila}-P${pos}`);
+}
+
+function gestionarPucho(traz) {
+  const p = puchoData.find(x => String(x.trazabilidad) === String(traz));
+  if (p) gestionarItem(p);
+}
+
+async function elegirYGestionar(oc, titulo) {
+  if (oc.length === 0) return alert(`Posición ${titulo} VACÍA`);
+  if (oc.length === 1) return gestionarItem(oc[0]);
+
+  let msj = `📦 GESTIÓN: ${titulo}\nSeleccione un producto:\n\n`;
+  oc.forEach((p, idx) => msj += `${idx + 1}. ${p.producto} (Stock: ${p.cantidad}) (Vence: ${p.vencimiento || "S/F"})\n`);
   const sel = prompt(msj + "\nIngrese el número:");
   if (!sel) return;
-
-  const pucho = ocupantes[parseInt(sel, 10) - 1];
+  const pucho = oc[parseInt(sel, 10) - 1];
   if (!pucho) return alert("Selección no válida");
+  return gestionarItem(pucho);
+}
 
+async function gestionarItem(pucho) {
   const accion = prompt(
-    `Producto: ${pucho.producto}\nStock: ${pucho.cantidad}\n\n` +
-    `1. DESPACHAR (Retirar)\n` +
-    `2. MOVER (Cambiar ubicación)\n` +
-    `3. CANCELAR`
+    `Producto: ${pucho.producto}\nUbicación: ${ubicTxt(pucho)}\nStock: ${pucho.cantidad}\n\n` +
+    `1. DESPACHAR (Retirar)\n2. MOVER (Cambiar ubicación)\n3. CANCELAR`
   );
 
-  if (accion === "1") {
-    const cantidadASacar = prompt(`Stock disponible: ${pucho.cantidad}\n¿Cuánto vas a retirar?`);
-    if (cantidadASacar === null || cantidadASacar === "") return;
+  try {
+    if (accion === "1") {
+      const txt = prompt(`Stock disponible: ${pucho.cantidad}\n¿Cuánto vas a retirar?`);
+      if (txt === null || txt === "") return;
+      const n = parseInt(txt, 10);
+      if (isNaN(n) || n <= 0) return alert("❌ Cantidad no válida.");
+      if (n > pucho.cantidad) return alert("❌ No podés sacar más de lo que hay.");
 
-    const numSacar = parseInt(cantidadASacar, 10);
-    if (isNaN(numSacar) || numSacar <= 0) return alert("❌ Cantidad no válida.");
-    if (numSacar > pucho.cantidad) return alert("❌ No podés sacar más de lo que hay.");
-
-    const sobrante = pucho.cantidad - numSacar;
-
-    try {
+      const sobrante = pucho.cantidad - n;
       if (sobrante === 0) {
-        if (confirm("Se retira el pucho completo. ¿Liberar posición?")) {
-          const r = await apiPost({ action: "deleteInventarioByTraz", trazabilidad: pucho.trazabilidad });
-          if (!r.ok) throw new Error(r.error || "No ok");
-          alert("✅ Posición liberada.");
-        }
+        if (!confirm("Se retira el pucho completo. ¿Liberar posición?")) return;
+        const r = await apiPost({ action: "deleteInventarioByTraz", trazabilidad: pucho.trazabilidad });
+        if (!r.ok) throw new Error(r.error || "No ok");
+        alert("✅ Posición liberada.");
       } else {
         const r = await apiPost({ action: "updateInventarioByTraz", trazabilidad: pucho.trazabilidad, data: { "Cantidad": sobrante } });
         if (!r.ok) throw new Error(r.error || "No ok");
         alert(`✅ Retiro OK. Quedan ${sobrante}.`);
       }
-      await conectarCerebro();
-      mostrarPantalla("pantalla-inicio");
-    } catch (e) {
-      alertError("No pude actualizar el inventario.", e);
-    }
 
-  } else if (accion === "2") {
-    const nR = prompt("Nuevo Rack:", pucho.rack);
-    const nL = prompt("Nuevo Lado (A/B):", pucho.lado);
-    const nP = prompt("Nueva Posición (1-29):", pucho.posicion);
-    if (!nR || !nL || !nP) return;
+    } else if (accion === "2") {
+      const nZ = (prompt("Nueva zona (Z1, Z2, Z3, Z4, Z5, PUL):", zonaDe(pucho)) || "").trim().toUpperCase();
+      if (!ZONAS[nZ]) return alert("❌ Zona inválida.");
 
-    try {
-      const r = await apiPost({
-        action: "updateInventarioByTraz",
-        trazabilidad: pucho.trazabilidad,
-        data: { "Rack": nR, "Lado": nL, "Posición": nP }
-      });
+      let data;
+      if (ZONAS_CON_RACK[nZ]) {
+        const nR = (prompt(`Nuevo Rack (${ZONAS_CON_RACK[nZ].join(", ")}):`, pucho.rack) || "").trim().toUpperCase();
+        const nL = (prompt("Nuevo Lado (A/B):", pucho.lado) || "").trim().toUpperCase();
+        if (!ZONAS_CON_RACK[nZ].includes(nR) || !["A", "B"].includes(nL)) return alert("❌ Ubicación inválida.");
+        const maxP = getPosicionesPorRack(nR);
+        const nP = parseInt(prompt(`Nueva Posición (1-${maxP}):`, pucho.posicion), 10);
+        if (!nP || nP < 1 || nP > maxP) return alert("❌ Posición inválida.");
+        data = { "Zona": nZ, "Rack": nR, "Lado": nL, "Fila": "", "Posición": nP };
+      } else {
+        const cfg = ZONAS_FILAS[nZ];
+        const nF = parseInt(prompt(`Nueva Fila (1-${cfg.filas}):`, pucho.fila), 10);
+        if (!nF || nF < 1 || nF > cfg.filas) return alert("❌ Fila inválida.");
+        const nP = parseInt(prompt(`Nueva Posición (1-${cfg.pos}):`, pucho.posicion), 10);
+        if (!nP || nP < 1 || nP > cfg.pos) return alert("❌ Posición inválida.");
+        data = { "Zona": nZ, "Rack": "", "Lado": "", "Fila": nF, "Posición": nP };
+      }
+
+      const r = await apiPost({ action: "updateInventarioByTraz", trazabilidad: pucho.trazabilidad, data });
       if (!r.ok) throw new Error(r.error || "No ok");
       alert("🚚 Pucho movido.");
-      await conectarCerebro();
-      mostrarPantalla("pantalla-inicio");
-    } catch (e) {
-      alertError("No pude mover el pucho.", e);
+
+    } else {
+      return;
     }
+
+    await conectarCerebro();
+    mostrarPantalla("pantalla-inicio");
+  } catch (e) {
+    if (e.message === "SESION") {
+      alert("Tu sesión expiró. Ingresá de nuevo.");
+      mostrarPantalla("pantalla-login");
+      return;
+    }
+    alertError("No pude actualizar el inventario.", e);
   }
 }
 
@@ -1069,11 +1142,11 @@ function ejecutarBusquedaGlobal(valor) {
              Stock: ${p.cantidad}
           </p>
           <div class="flex gap-2 mt-1">
-            <span class="bg-primary text-white text-[9px] px-2 py-0.5 rounded">${p.rack}-${p.lado}${p.posicion}</span>
+            <span class="bg-primary text-white text-[9px] px-2 py-0.5 rounded">${ubicTxt(p)}</span>
             <span class="bg-gray-100 text-gray-500 text-[9px] px-2 py-0.5 rounded">Traz: ${p.trazabilidad}</span>
           </div>
         </div>
-        <button onclick="gestionarPosicion('${p.rack}', '${p.lado}', ${p.posicion})"
+        <button onclick="gestionarPucho('${p.trazabilidad}')"
           class="bg-primary text-white px-4 py-2 rounded-xl font-black text-xs active:scale-95 transition-all">
           GESTIONAR
         </button>
@@ -1093,7 +1166,7 @@ function mostrarInventario() {
     html += `<tr>
       <td class="p-2 font-bold">${p.producto}</td>
       <td class="p-2 text-center">${p.cantidad}</td>
-      <td class="p-2">${p.rack}-${p.lado}${p.posicion}</td>
+      <td class="p-2">${ubicTxt(p)}</td>
     </tr>`;
   });
 
@@ -1202,6 +1275,24 @@ const RACK_A_ZONA = {
 
 // Un pucho pertenece a la zona que tenga cargada; si no tiene, la de su rack
 const zonaDe = (p) => p.zona || RACK_A_ZONA[p.rack] || "";
+       // Zonas que usan racks (Rack + Lado + Posición)
+const ZONAS_CON_RACK = {
+  Z4: ["R1", "R2", "R3", "R4"],
+  Z5: ["R5", "R6", "R7", "R8"]
+};
+
+// Zonas con filas: cantidad de filas y de posiciones por fila
+// ⚠️ CAMBIÁ ESTOS NÚMEROS por los reales de tu depósito
+// Fila 1 = la primera, contando desde la pared de abajo del mapa hacia arriba
+const ZONAS_FILAS = {
+  Z1:  { filas: 6, pos: 40 },
+  Z2:  { filas: 8, pos: 40 },
+  Z3:  { filas: 8, pos: 40 },
+  PUL: { filas: 10, pos: 20 }
+};
+
+// Texto de ubicación de un pucho
+const ubicTxt = (p) => p.rack ? `${p.rack}-${p.lado}${p.posicion}` : `F${p.fila}-P${p.posicion}`;
 
 // Después de dibujar las zonas, pegá acá el resultado de "COPIAR ZONAS"
 const ZONAS_FIJAS = [{"zona":"PUL","x":0.57,"y":17.48,"w":10.4,"h":30.51},{"zona":"Z1","x":11.37,"y":80.32,"w":70.84,"h":18.46},{"zona":"Z4","x":13.61,"y":1.37,"w":68.07,"h":21.96},{"zona":"Z3","x":13.69,"y":23.34,"w":67.91,"h":28.22},{"zona":"Z2","x":14.01,"y":51.4,"w":67.83,"h":20.44},{"zona":"Z5","x":82.98,"y":-0.76,"w":16.82,"h":99.3},{"zona":"Z5","x":82.25,"y":94.11,"w":1.22,"h":4.88}];
@@ -1336,42 +1427,69 @@ function mostrarZonaMapa(id) {
     return c.includes("bg-red-600") || c.includes("bg-black");
   }).length;
 
-  // Agrupar por rack (o "Fuera de rack")
-  const grupos = {};
-  items.forEach(p => { (grupos[p.rack || "—"] = grupos[p.rack || "—"] || []).push(p); });
+  const lista = [...items].sort((a, b) =>
+    String(a.rack).localeCompare(String(b.rack)) ||
+    String(a.lado).localeCompare(String(b.lado)) ||
+    Number(a.fila) - Number(b.fila) ||
+    Number(a.posicion) - Number(b.posicion));
 
-  const bloques = Object.keys(grupos).sort().map(rack => {
-    const lista = grupos[rack].sort((a, b) =>
-      String(a.lado).localeCompare(String(b.lado)) || Number(a.posicion) - Number(b.posicion));
+  const filas = lista.map(p => `
+    <div class="border border-gray-100 rounded-xl p-3 mb-2 flex justify-between items-center gap-2">
+      <div>
+        <p class="text-xs font-black text-primary">${p.producto}</p>
+        <p class="text-[10px] font-bold text-gray-500">${ubicTxt(p)} · Stock: ${p.cantidad} · Traz: ${p.trazabilidad}</p>
+        <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-black ${obtenerClaseVencimiento(p.vencimiento)}">Vence: ${p.vencimiento || "S/F"}</span>
+      </div>
+      <button onclick="gestionarPucho('${p.trazabilidad}')"
+        class="bg-primary text-white px-3 py-2 rounded-xl font-black text-[10px] shrink-0">GESTIONAR</button>
+    </div>`).join("");
 
-    const filas = lista.map(p => `
-      <div class="border border-gray-100 rounded-xl p-3 mb-2 flex justify-between items-center gap-2">
-        <div>
-          <p class="text-xs font-black text-primary">${p.producto}</p>
-          <p class="text-[10px] font-bold text-gray-500">
-            ${p.rack ? `${p.rack}-${p.lado}${p.posicion} · ` : ""}Stock: ${p.cantidad} · Traz: ${p.trazabilidad}
-          </p>
-          <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-black ${obtenerClaseVencimiento(p.vencimiento)}">Vence: ${p.vencimiento || "S/F"}</span>
-        </div>
-        ${p.rack ? `<button onclick="gestionarPosicion('${p.rack}', '${p.lado}', ${p.posicion})"
-          class="bg-primary text-white px-3 py-2 rounded-xl font-black text-[10px] shrink-0">GESTIONAR</button>` : ""}
-      </div>`).join("");
-
-    const titulo = rack === "—" ? "Fuera de rack" : `Rack ${rack}`;
-    const verRack = rack === "—" ? "" :
-      `<button onclick="abrirDetalleRack('${rack}')" class="ml-2 px-2 py-1 bg-blue-100 text-primary rounded-lg font-bold text-[10px]">VER CUADRÍCULA</button>`;
-
-    return `<h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mt-4 mb-2">${titulo} (${lista.length}) ${verRack}</h4>${filas}`;
-  }).join("");
+  const btn = "mr-2 mb-2 px-3 py-2 bg-blue-100 text-primary rounded-xl font-bold text-[11px]";
+  const botones =
+    (ZONAS_FILAS[id] ? `<button onclick="abrirDetalleZona('${id}')" class="${btn}">VER FILAS Y POSICIONES</button>` : "") +
+    (ZONAS_CON_RACK[id] ? ZONAS_CON_RACK[id].map(r => `<button onclick="abrirDetalleRack('${r}')" class="${btn}">${r}</button>`).join("") : "");
 
   $("mapa-detalle").innerHTML = `
     <div class="bg-white rounded-2xl shadow p-4 border border-gray-100">
       <h3 class="text-xl font-black text-primary">${ZONAS[id] || id}</h3>
       <p class="text-xs font-bold text-gray-400 mt-1">${items.length} puchos · ${criticos} críticos o vencidos</p>
-      ${bloques || `<p class="text-sm text-gray-400 mt-4">Sin mercadería cargada en esta zona.</p>`}
+      <div class="mt-3">${botones}</div>
+      ${filas || `<p class="text-sm text-gray-400 mt-4">Sin mercadería cargada en esta zona.</p>`}
     </div>`;
   $("mapa-detalle").scrollIntoView({ behavior: "smooth" });
 }
+
+       function abrirDetalleZona(id) {
+  const cfg = ZONAS_FILAS[id];
+  if (!cfg) return;
+  $("titulo-zona").innerText = ZONAS[id];
+
+  let html = "";
+  for (let f = 1; f <= cfg.filas; f++) {
+    let cuadros = "";
+    for (let p = 1; p <= cfg.pos; p++) {
+      const oc = puchoData.filter(x =>
+        zonaDe(x) === id && String(x.fila) === String(f) && String(x.posicion) === String(p));
+      const clase = oc.length
+        ? obtenerClaseVencimiento(oc[0].vencimiento)
+        : "bg-gray-50 text-gray-300 border border-gray-100";
+      cuadros += `
+        <div onclick="gestionarCasillero('${id}', ${f}, ${p})"
+          class="shrink-0 w-10 h-10 flex flex-col items-center justify-center rounded-lg text-[10px] font-black cursor-pointer ${clase}">
+          ${p}${oc.length > 1 ? `<span class="text-[7px] bg-white/30 px-1 rounded">x${oc.length}</span>` : ""}
+        </div>`;
+    }
+    html += `
+      <div class="bg-white p-4 rounded-2xl shadow border border-gray-100">
+        <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Fila ${f}</h3>
+        <div class="flex gap-1 overflow-x-auto pb-2">${cuadros}</div>
+      </div>`;
+  }
+  $("filas-zona").innerHTML = html;
+  mostrarPantalla("pantalla-zona-detalle");
+}
+       
+    
 
 // === 13) BOOT ===
 window.onload = async () => {
